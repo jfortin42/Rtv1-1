@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 18:21:30 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/31 15:22:40 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/03 23:44:58 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void				*ft_memchr(void const *s, int c, size_t n);
 int					ft_memcmp(void const *s1, void const *s2, size_t n);
 size_t				ft_strlen(char const *s);
 char				*ft_strdup(char const *s);
+char				*ft_strndup(char const *s, int n);
 char				*ft_strcpy(char *dest, char const *src);
 char				*ft_strncpy(char *dest, char const *src, size_t n);
 char				*ft_strcat(char *dest, char const *src);

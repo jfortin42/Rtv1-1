@@ -6,15 +6,18 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/04/03 20:59:43 by ldedier          ###   ########.fr        #
+#    Updated: 2018/04/04 00:01:43 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME        = rtv1
+NAME	= rtv1
 
-CC      = gcc
+CC		= gcc
 
 PWD = \"$(shell pwd)\"
+
+OK_COLOR = \x1b[32;01m
+EOC = \033[0m
 
 DEBUG ?= 0
 
@@ -35,37 +38,49 @@ LIBMAT_INCLUDEDIR = includes
 
 LIBSDL2DIR = SDL2-2.0.8
 LIBSDL2_INCLUDEDIR = include
-LIBSDL2_LIBDIR = build
+LIBSDL2_LIBDIR = build/.libs
 
-OK_COLOR = \x1b[32;01m
-EOC = \033[0m
-
-SRCS_NO_PREFIX = main.c
+SRCS_NO_PREFIX = main.c ft_init.c ft_loop.c ft_events.c
 
 INCLUDES_NO_PREFIX = rtv1.h
 
 SOURCES = $(addprefix $(SRCDIR)/, $(SRCS_NO_PREFIX))
-
 OBJECTS = $(addprefix $(OBJDIR)/, $(SRCS_NO_PREFIX:%.c=%.o))
-
 INCLUDES = $(addprefix $(INCLUDESDIR)/, $(INCLUDES_NO_PREFIX))
-INC = -I $(INCLUDESDIR) -I $(LIBFTDIR)/$(LIBFT_INCLUDEDIR) -I $(LIBMATDIR)/$(LIBMAT_INCLUDEDIR) \
+
+LIBSDL2 = ./$(LIBSDL2DIR)/$(LIBSDL2_LIBDIR)/libSDL2-2.0.0.dylib
+
+INC = -I $(INCLUDESDIR) -I $(LIBFTDIR)/$(LIBFT_INCLUDEDIR)\
+	  -I $(LIBMATDIR)/$(LIBMAT_INCLUDEDIR) \
 	  -I $(LIBSDL2DIR)/$(LIBSDL2_INCLUDEDIR)
+
 CFLAGS = -DPATH=$(PWD) -Wall -Wextra -Werror $(INC)
+
+LFLAGS = -L $(LIBFTDIR) -lft -L $(LIBMATDIR) -lmat\
+		 -L $(LIBSDL2DIR)/$(LIBSDL2_LIBDIR) -lsdl2
+
+opti:
+	@make -j all
 
 all: $(BINDIR)/$(NAME)
 
 debug:
-	@make all DEBUG=0
+	@make -j all DEBUG=1
 
-$(BINDIR)/$(NAME): $(OBJECTS)
+$(LIBSDL2):
+	@cd $(LIBSDL2DIR);./configure
+	@echo "$(OK_COLOR)$(NAME) SDL2 configured with success !$(EOC)"
+	@make -C $(LIBSDL2DIR)
+	@echo "$(OK_COLOR)SDL2 linked with success !$(EOC)"
+
+$(BINDIR)/$(NAME): $(OBJECTS) $(LIBSDL2)
 	@make -C $(LIBFTDIR)
 	@make -C $(LIBMATDIR)
-	@./$(LIBSDL2DIR)/configure
-	@make -C $(LIBSDL2DIR)
-	@$(CC) -o $@ $^ -framework OpenGL -framework Appkit -L $(LIBFTDIR) -lft -L $(LIBMATDIR) -lmat -L\
-		$(LIBSDL2DIR)/$(LIBSDL2_LIBDIR) -lsdl2
+	$(CC) -o $@ $^ $(LFLAGS)
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
+	@install_name_tool -change /usr/local/lib/libSDL2-2.0.0.dylib $(LIBSDL2) $(NAME)
+	@echo $(NAME) > .gitignore
+	@echo *.o > $(OBJDIR)/.gitignore
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c $(INCLUDES)
 	$(CC) -c $< -o $@ $(CFLAGS)
@@ -77,3 +92,9 @@ clean:
 
 fclean: clean
 	@make fclean -C $(LIBFTDIR)
+	@make fclean -C $(LIBMATDIR)
+	@make clean -C $(LIBSDL2DIR)
+
+re: fclean opti
+
+.PHONY: all clean fclean re

@@ -6,33 +6,53 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/08 21:46:51 by ldedier           #+#    #+#             */
-/*   Updated: 2018/02/26 21:18:26 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/23 17:14:51 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	decal_tab(char *str, int index, int size)
+char	*ft_get_buffer_rest(t_list **list, int const fd)
 {
-	int i;
+	t_fd_buffer		*to_add;
+	t_list			*ptr;
+	t_list			*new_node;
 
-	i = index;
-	while (i < size)
+	ptr = *list;
+	while (ptr != NULL)
 	{
-		str[i - index] = str[i];
-		i++;
+		if (((t_fd_buffer *)(ptr->content))->fd == fd)
+			return (((t_fd_buffer *)(ptr->content))->buffer);
+		ptr = ptr->next;
 	}
-	str[i - index] = '\0';
+	if (!(to_add = (t_fd_buffer *)malloc(sizeof(t_fd_buffer))))
+		return (NULL);
+	to_add->fd = fd;
+	if (!(new_node = ft_lstnew((void *)to_add, sizeof(to_add))))
+		return (NULL);
+	ft_lstadd(list, new_node);
+	if (!(((t_fd_buffer *)((*list)->content))->buffer = ft_strnew(BUFF_SIZE)))
+		return (NULL);
+	free(to_add);
+	return (((t_fd_buffer *)((*list)->content))->buffer);
 }
 
 int		ft_process_strcadline(int i, char **line, char *res, char *rest)
 {
+	int index;
+
 	if (!(*line = ft_strsub(res, 0, i)))
-		return (1);
+		return (-1);
 	i = 0;
 	while (rest[i] != '\n')
 		i++;
-	decal_tab(rest, i + 1, BUFF_SIZE);
+	index = i + 1;
+	while (index < BUFF_SIZE)
+	{
+		rest[index - (i + 1)] = rest[index];
+		index++;
+	}
+	rest[index - (i + 1)] = '\0';
 	ft_strdel(&res);
 	return (0);
 }
@@ -43,21 +63,21 @@ int		ft_strcadline(char **line, char *rest, int *endline)
 	int		i;
 
 	if (!(res = ft_strjoin(*line, rest)))
-		return (1);
+		return (-1);
 	ft_strdel(line);
 	i = 0;
 	while (res[i] && res[i] != '\n')
 		i++;
 	if (res[i] == '\n')
 	{
-		if (ft_process_strcadline(i, line, res, rest) == 1)
-			return (1);
+		if (ft_process_strcadline(i, line, res, rest) == -1)
+			return (-1);
 		*endline = 1;
 	}
 	else
 	{
 		if (!(*line = ft_strdup(res)))
-			return (1);
+			return (-1);
 		ft_strdel(&res);
 		ft_bzero(rest, BUFF_SIZE);
 	}
@@ -74,7 +94,7 @@ int		process_get_next_line(int fd, char **line, int endline, char *rest)
 		ft_bzero(rest, BUFF_SIZE);
 		while (!endline && (ret = read(fd, rest, BUFF_SIZE)) > 0)
 		{
-			if (ft_strcadline(line, rest, &endline) == 1)
+			if (ft_strcadline(line, rest, &endline) == -1)
 				return (-1);
 		}
 		if (ret == -1)
@@ -88,16 +108,15 @@ int		process_get_next_line(int fd, char **line, int endline, char *rest)
 
 int		get_next_line(int const fd, char **line)
 {
-	static char		*rest = NULL;
+	static t_list	*list = NULL;
 	int				i;
 	int				endline;
+	char			*rest;
+	int				index;
 
-	if (rest == NULL)
-	{
-		if (!(rest = ft_strnew(BUFF_SIZE)))
-			return (-1);
-	}
 	if (line == NULL)
+		return (-1);
+	if (!(rest = ft_get_buffer_rest(&list, fd)))
 		return (-1);
 	endline = 0;
 	i = 0;
@@ -105,9 +124,13 @@ int		get_next_line(int const fd, char **line)
 		i++;
 	if (rest[i] == '\n')
 		endline = 1;
-	if (!(*line = ft_strnew(i)))
+	if (!(*line = ft_strndup(rest, i)))
 		return (-1);
-	ft_strncpy(*line, rest, i);
-	decal_tab(rest, i + 1, BUFF_SIZE);
+	index = i + 1;
+	while (index < BUFF_SIZE)
+	{
+		rest[index - (i + 1)] = rest[index];
+		index++;
+	}
 	return (process_get_next_line(fd, line, endline, rest));
 }

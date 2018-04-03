@@ -4,7 +4,7 @@
 # include <SDL.h>
 # include "libft.h"
 # include "libmat.h"
-
+# include <fcntl.h>
 typedef struct	s_keys
 {
 	int			up;
@@ -30,7 +30,30 @@ typedef struct	s_keys
 
 typedef struct		 s_sdl
 {
+	SDL_Surface		*surface;
+	SDL_Rect		screen;
 	SDL_Window		*window;
+	SDL_Renderer	*renderer;
 }					t_sdl;
 
+typedef struct		s_dim
+{
+	int				width;
+	int				height;
+}					t_dim;
+
+typedef struct		s_env 
+{
+	t_sdl			sdl;
+	t_dim			dim;
+	t_keys			keys;
+}					t_env;
+
+int					ft_init_all(t_env *e);
+void				ft_loop(t_env *e);
+void				ft_loop(t_env *e);
+void				ft_keys_down(t_env *e, SDL_Event event);
+void				ft_keys_up(t_env *e, SDL_Event event);
+void				ft_mouse_motion(t_env *e, SDL_Event event);
+void				ft_loop(t_env *e);
 #endif
