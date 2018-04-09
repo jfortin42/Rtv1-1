@@ -6,13 +6,13 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/04/04 00:01:43 by ldedier          ###   ########.fr        #
+#    Updated: 2018/04/08 18:30:18 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= rtv1
 
-CC		= gcc
+CC		= gcc -g
 
 PWD = \"$(shell pwd)\"
 
@@ -76,7 +76,7 @@ $(LIBSDL2):
 $(BINDIR)/$(NAME): $(OBJECTS) $(LIBSDL2)
 	@make -C $(LIBFTDIR)
 	@make -C $(LIBMATDIR)
-	$(CC) -o $@ $^ $(LFLAGS)
+	$(CC) -o $@ $^ $(LFLAGS) -fsanitize=address
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
 	@install_name_tool -change /usr/local/lib/libSDL2-2.0.0.dylib $(LIBSDL2) $(NAME)
 	@echo $(NAME) > .gitignore
@@ -93,7 +93,7 @@ clean:
 fclean: clean
 	@make fclean -C $(LIBFTDIR)
 	@make fclean -C $(LIBMATDIR)
-	@make clean -C $(LIBSDL2DIR)
+	#@make clean -C $(LIBSDL2DIR)
 
 re: fclean opti
 

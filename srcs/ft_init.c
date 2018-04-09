@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/03 22:31:44 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/08 19:35:43 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	ft_get_dimensions(t_env *e)
 
 int			ft_init_sdl(t_env *e)
 {
-	e->sdl.screen.x = 300;
-	e->sdl.screen.y = 200;
+	e->sdl.screen.x = 0;
+	e->sdl.screen.y = 0;
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		return (0);
 	ft_get_dimensions(e);
@@ -34,6 +34,8 @@ int			ft_init_sdl(t_env *e)
 		e->sdl.screen.x, e->sdl.screen.y, e->sdl.screen.w, e->sdl.screen.h, SDL_WINDOW_FULLSCREEN_DESKTOP)))
 		return (0);
 	e->sdl.renderer = SDL_CreateRenderer(e->sdl.window, -1, 0);
+	if (!(e->sdl.surface = SDL_CreateRGBSurface(0, e->dim.width, e->dim.height, 32, 0, 0, 0, 0)))
+		return (0);
 	if (e->sdl.renderer == NULL)
 		return (0);
 	if (SDL_RenderSetLogicalSize(e->sdl.renderer,

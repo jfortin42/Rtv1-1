@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/03/29 00:23:51 by ldedier          ###   ########.fr        #
+#    Updated: 2018/04/07 21:09:38 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,9 @@ EOC = \033[0m
 
 SRCS_NO_PREFIX = ft_vec.c ft_mat_mult.c ft_translate.c ft_scale.c ft_tools.c\
 				 ft_rotate.c ft_eye.c ft_transpose.c ft_normalize.c\
-				 ft_vec_op.c ft_look_at.c ft_perspective.c
+				 ft_vec_op.c ft_look_at.c ft_perspective.c ft_mat_vec_mult.c\
+				 ft_model_view_matrix.c
+
 
 SOURCES = $(addprefix $(SRCDIR)/, $(SRCS_NO_PREFIX))
 OBJECTS = $(addprefix $(OBJDIR)/, $(SRCS_NO_PREFIX:%.c=%.o))

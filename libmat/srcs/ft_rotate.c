@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 22:57:58 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/28 22:22:50 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/07 21:12:38 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,17 @@ t_mat4	ft_mat4_rotate(float alpha, float beta, float gamma)
 	mat_x = ft_mat4_rotate_x(alpha);
 	mat_y = ft_mat4_rotate_y(beta);
 	mat_z = ft_mat4_rotate_z(gamma);
+	return (ft_mat4_mult(ft_mat4_mult(mat_x, mat_y),mat_z));
+}
+
+t_mat4	ft_mat4_rotate_vec(t_vec3 vec)
+{
+	t_mat4 mat_x;
+	t_mat4 mat_y;
+	t_mat4 mat_z;
+
+	mat_x = ft_mat4_rotate_x(vec.x);
+	mat_y = ft_mat4_rotate_y(vec.y);
+	mat_z = ft_mat4_rotate_z(vec.z);
 	return (ft_mat4_mult(ft_mat4_mult(mat_x, mat_y),mat_z));
 }

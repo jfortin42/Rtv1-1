@@ -4,7 +4,9 @@
 # include <SDL.h>
 # include "libft.h"
 # include "libmat.h"
+# include "objects.h"
 # include <fcntl.h>
+
 typedef struct	s_keys
 {
 	int			up;
@@ -28,9 +30,16 @@ typedef struct	s_keys
 	int			key_shift;
 }				t_keys;
 
+typedef struct		s_ray
+{
+	t_vec3			position;
+	t_vec3			direction;
+}					t_ray;
+
 typedef struct		 s_sdl
 {
 	SDL_Surface		*surface;
+	SDL_Texture		*texture;
 	SDL_Rect		screen;
 	SDL_Window		*window;
 	SDL_Renderer	*renderer;
@@ -42,11 +51,27 @@ typedef struct		s_dim
 	int				height;
 }					t_dim;
 
+typedef struct 		s_test
+{
+	t_sphere		sphere;
+	t_camera		camera;
+	t_mat4			transform_pos;
+	t_mat4			transform_pos_inv;
+	t_mat4			transform_dir;
+	t_mat4			transform_dir_inv;
+	float			left;
+	float			right;
+	float			top;
+	float			bottom;
+}					t_test;
+
 typedef struct		s_env 
 {
 	t_sdl			sdl;
 	t_dim			dim;
 	t_keys			keys;
+	t_test			test;
+	t_camera		cam;
 }					t_env;
 
 int					ft_init_all(t_env *e);
