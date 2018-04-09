@@ -6,7 +6,7 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/04/08 18:30:18 by ldedier          ###   ########.fr        #
+#    Updated: 2018/04/09 05:55:28 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,7 +93,7 @@ clean:
 fclean: clean
 	@make fclean -C $(LIBFTDIR)
 	@make fclean -C $(LIBMATDIR)
-	#@make clean -C $(LIBSDL2DIR)
+	@make clean -C $(LIBSDL2DIR)
 
 re: fclean opti
 
