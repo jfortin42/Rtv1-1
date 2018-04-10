@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/09 05:54:14 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/10 00:46:00 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,11 @@ t_sphere	ft_new_sphere(float radius, t_vec3 pos, t_vec3 rot, t_vec3 scale)
 	return (res);
 }
 
-
 void	ft_init_test(t_env *e)
 {
-	e->test.sphere = ft_new_sphere(5.f, ft_new_vec3(0.0f, 0.f, 0.f),
-		ft_new_vec3(0.0, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f));
-	
+	e->test.sphere = ft_new_sphere(1.f, ft_new_vec3(0.f, 0.f, 10.f),
+		ft_new_vec3(0.0f, M_PI, 0.0f), ft_new_vec3(1.f, 1.f, 1.f));
+
 	t_mat4 rotate = ft_mat4_rotate_vec(e->test.sphere.rotation);
 	ft_printf("rotate\n");
 	ft_print_mat4(rotate);
@@ -111,112 +110,73 @@ void	ft_init_test(t_env *e)
 	ft_printf("TRANSFORM\n");
 	ft_print_mat4(transform);
 	
-	ft_printf("INVERSE\n");
+	ft_printf("INVERSE POS\n");
 	ft_print_mat4(invtransform);
-	
+
 	ft_printf("TRANSFORM * INVERSE\n");
 	ft_print_mat4(ft_mat4_mult(invtransform, transform));
-
 
 	t_mat4 transform_dir = ft_mat4_mult(scale, rotate);
 	t_mat4 transform_dir_inv = ft_mat4_mult(scale2, rotate2);
 
-
-
-
+	ft_printf("INVERSE DIR \n");
+	ft_print_mat4(transform_dir_inv);
+	
 	ft_printf("TRANSFORM * INVERSE\n");
 	ft_print_mat4(ft_mat4_mult(transform_dir_inv, transform_dir));
 
-	printf("%d\n", e->dim.width);
-	printf("%d\n", e->dim.height);
-	
 	e->test.transform_pos = transform;
 	e->test.transform_pos_inv = invtransform;
 
 	e->test.transform_dir = transform_dir;
 	e->test.transform_dir_inv = transform_dir_inv;
-
-	e->test.top = -9;
-	e->test.bottom = 9;
-	e->test.left = -16;
-	e->test.right = 16;
 }
 
 void	ft_render_test(t_env *e)
 {
 	t_ray	ray;
-	float dx;
-	float dy;
+	e->cam.fov = (70 * M_PI) / 180.0;
+	double a;
+	double b;
+	double c;
+	double t;
+	double px;
+	double py;
 
-	float a;
-	float b;
-	float c;
-	float t;
+	double image_ratio = (float)e->dim.width / (float)e->dim.height;
 
-	dx = (e->test.right * 2) / e->dim.width;
-	dy = (e->test.bottom * 2) / e->dim.height;
-
-	t_vec3 screen_plane;
-	
 	int *pix;
+	SDL_LockSurface(e->sdl.surface);
 	pix = (int *)e->sdl.surface->pixels;
-	e->cam.position = ft_new_vec3(5, 0, -10);
+	e->cam.position = ft_new_vec3(5, 0, 0);
 	int i;
 	int j;
-
 	ray.position = e->cam.position;
-	ft_print_vec3(ray.position);
-	c = (ray.position.x * ray.position.x) + (ray.position.y * ray.position.y) + (ray.position.z * ray.position.z) - (e->test.sphere.radius * e->test.sphere.radius);
 	i = 0;
 	while (i < e->sdl.screen.h)
 	{
 		j = 0;
 		while (j < e->sdl.screen.w)
 		{
-			screen_plane.x = e->test.left + (dx / 2.0) + j * dx;
-			screen_plane.y = e->test.top + (dy / 2.0 ) + i * dy;
-			screen_plane.z = 16; //DETERMINED BY LEFT/TOP ??
-	
-		//	ray.direction = ft_vec3_add(screen_plane, ray.position);
-			ray.direction = screen_plane;
+			px = (2 * ((j + 0.5) / e->dim.width) - 1) * tan(e->cam.fov / 2) * image_ratio;
+			py = (1 - 2 * (i + 0.5) / e->dim.height) * tan(e->cam.fov / 2);
+
+			ray.position = ft_vec3_mat4_mult(e->cam.position, e->test.transform_pos_inv);
+			ray.direction = ft_vec3_mat4_mult(ft_new_vec3(px, py, 1), e->test.transform_dir_inv);
 			ft_vec3_normalize(&(ray.direction));
-			/*
-			if (i + j == 0)	
-			{
-				ft_print_mat4(e->test.transform_pos_inv);
-				printf("position avant tranformation\n");
-				ft_print_vec3(ray.position);
-				printf("direction avant tranformation\n");
-				ft_print_vec3(ray.direction);
-			}
-			ray.direction = ft_vec3_mat4_mult(ray.direction, e->test.transform_dir_inv);
-			//ft_vec3_normalize(&(ray.direction));
-			ray.position = ft_vec3_mat4_mult(ray.position, e->test.transform_pos_inv);
-			if (i + j == 0)	
-			{
-				printf("position apres tranformation\n");
-				ft_print_vec3(ray.position);
-				printf("direction apres tranformation\n");
-				ft_print_vec3(ray.direction);
-			}
-			*/
-			if(i + j == 0)
-			{
-				printf("screen plane\n");
-				ft_print_vec3(screen_plane);
-
-				printf("ray position\n");
-				ft_print_vec3(ray.position);
-
-				printf("ray direction\n");
-				ft_print_vec3(ray.direction);
-			}
+			//ray.direction = ft_vec3_cmp(ray.direction, ray.position);
 
 			a = (ray.direction.x * ray.direction.x) + (ray.direction.y * ray.direction.y) + (ray.direction.z * ray.direction.z);
 			b = 2 * ((ray.position.x * ray.direction.x) + (ray.position.y * ray.direction.y) + (ray.position.z * ray.direction.z));
+			c = (ray.position.x * ray.position.x) + (ray.position.y * ray.position.y) + (ray.position.z * ray.position.z) - (e->test.sphere.radius * e->test.sphere.radius);
+			
 			t = (-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a);
+		
 			if (t >= 0)
+			{
+				//pix[e->sdl.screen.w * i + j] = (int)(t * 10000) % 0xffffff;
 				pix[e->sdl.screen.w * i + j] = e->test.sphere.color;
+			}
 			else
 			{
 				t = (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a);
@@ -230,6 +190,7 @@ void	ft_render_test(t_env *e)
 	if (!(e->sdl.texture = SDL_CreateTextureFromSurface(e->sdl.renderer,
 			e->sdl.surface)))
 		exit(1);
+	SDL_UnlockSurface(e->sdl.surface);
 	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &(e->sdl.screen));
 	SDL_RenderPresent(e->sdl.renderer);
 	SDL_DestroyTexture(e->sdl.texture);
@@ -241,6 +202,7 @@ void	ft_loop(t_env *e)
 	SDL_Event event;
 	ft_init_test(e);
 	ft_render_test(e);
+	ft_printf("ON EST SORTI\n");	
 	end = 0;
 	while (!end)
 	{
