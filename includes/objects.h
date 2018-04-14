@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/05 21:04:53 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/08 19:27:18 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/14 18:47:07 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,21 @@
 
 typedef struct		s_sphere
 {
-					float radius;
-					t_vec3	position;
-					t_vec3	rotation;
-					t_vec3	scale;
-					int		color;
+	float			radius;
 }					t_sphere;
 
+typedef struct		s_cone
+{
+	float			radius;
+}					t_cone;
+
+typedef struct		s_plane
+{
+	float			radius;
+}					t_plane;
+
+typedef struct		s_cylinder
+{
+	float			radius;
+}					t_cylinder;
 #endif
