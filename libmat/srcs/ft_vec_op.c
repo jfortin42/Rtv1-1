@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 01:30:30 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/30 21:21:52 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/15 17:29:22 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_vec3	ft_vec3_cmp(t_vec3 vec1, t_vec3 vec2)
 	return (res);
 }
 
-float	ft_vec3_dot_product(t_vec3 vec1, t_vec3 vec2)
+float	ft_dot_product(t_vec3 vec1, t_vec3 vec2)
 {
 	return (vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
 }

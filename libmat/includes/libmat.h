@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 00:16:34 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/07 22:10:46 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/15 17:29:39 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_vec3				ft_vec3_add(t_vec3 vec1, t_vec3 vec2);
 t_vec3				ft_vec3_cmp(t_vec3 vec1, t_vec3 vec2);
 t_vec3				ft_vec3_scalar(t_vec3 vec1, float k);
 t_vec3				ft_vec3_cross_product(t_vec3 vec1, t_vec3 vec2);
-float				ft_vec3_dot_product(t_vec3 vec1, t_vec3 vec2);
+float				ft_dot_product(t_vec3 vec1, t_vec3 vec2);
 
 
 t_mat4				ft_mat4_mult(t_mat4 mat1, t_mat4 mat2);

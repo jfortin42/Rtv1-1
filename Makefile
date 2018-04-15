@@ -6,7 +6,7 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/04/09 05:55:28 by ldedier          ###   ########.fr        #
+#    Updated: 2018/04/16 01:30:52 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,7 +80,7 @@ $(BINDIR)/$(NAME): $(OBJECTS) $(LIBSDL2)
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
 	@install_name_tool -change /usr/local/lib/libSDL2-2.0.0.dylib $(LIBSDL2) $(NAME)
 	@echo $(NAME) > .gitignore
-	@echo *.o > $(OBJDIR)/.gitignore
+	@echo $(OBJECTS) >> .gitignore
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c $(INCLUDES)
 	$(CC) -c $< -o $@ $(CFLAGS)
@@ -91,6 +91,7 @@ clean:
 	@rm -f $(OBJECTS)
 
 fclean: clean
+	@rm -f $(NAME)
 	@make fclean -C $(LIBFTDIR)
 	@make fclean -C $(LIBMATDIR)
 	@make clean -C $(LIBSDL2DIR)

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/14 19:55:40 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/16 01:29:56 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,16 @@ void    ft_process(t_env *e)
 	if (e->keys.key_7)
 		e->cam.rotation.z += M_PI / 16;
 	if (e->keys.key_8)
-		e->cam.rotation.z += M_PI / 16;
-	if (e->keys.key_8)
 		e->cam.rotation.z -= M_PI / 16;
+
 	if (e->keys.key_4)
 		e->cam.rotation.x += M_PI / 16;
 	if (e->keys.key_5)
 		e->cam.rotation.x -= M_PI / 16;
 	if (e->keys.key_e)
-		e->selected_object->rotation.y += M_PI / 16;
+		e->selected_object->rotation.x += M_PI / 16;
 	if (e->keys.key_q)
-		e->selected_object->rotation.y -= M_PI / 16;
+		e->selected_object->rotation.x -= M_PI / 16;
 }
 
 t_mat4  ft_mat4_inv_scale(t_mat4 scale)
@@ -113,64 +112,65 @@ t_mat4  ft_mat4_inv_translate(t_mat4 scale)
 
 void	ft_compute_matrix(t_object *object)
 {
-	t_mat4 rotate = ft_mat4_rotate_vec(object->rotation);
-	ft_printf("rotate\n");
-	ft_print_mat4(rotate);
+	t_mat4 rotate = ft_mat4_mult(ft_mat4_rotate_x(object->rotation.y), ft_mat4_mult(ft_mat4_rotate_y(object->rotation.x), ft_mat4_rotate_z(object->rotation.z)));
+//	ft_printf("rotate\n");
+//	ft_print_mat4(rotate);
 
 	t_mat4 translate = ft_mat4_translate_vec(object->position);
-	ft_printf("translate\n");
-	ft_print_mat4(translate);
+///	ft_printf("translate\n");
+//	ft_print_mat4(translate);
 
 	t_mat4 scale = ft_mat4_scale_vec(object->scale);
-	ft_printf("scale\n");
-	ft_print_mat4(scale);
+//	ft_printf("scale\n");
+//	ft_print_mat4(scale);
 
-	t_mat4 transform = ft_mat4_model_view_matrix_mat(translate, scale, rotate);
+	t_mat4 transform = ft_mat4_model_view_matrix_mat(translate, rotate, scale);
 
-	ft_printf("TRANSFORM\n");
-	ft_print_mat4(transform);
+//	ft_printf("TRANSFORM\n");
+//	ft_print_mat4(transform);
 
 	t_mat4 scale2 = ft_mat4_inv_scale(scale);
-	t_mat4 translate2 = ft_mat4_inv_translate(translate);
-	t_mat4 rotate2 = ft_mat4_mult(ft_mat4_rotate_z(-object->rotation.z), ft_mat4_mult(ft_mat4_rotate_y(-object->rotation.y), ft_mat4_rotate_x(-object->rotation.x)));
+	t_mat4 translate2 = ft_mat4_inv_translate(translate);	
+	t_mat4 rotate2 = ft_mat4_mult(ft_mat4_rotate_z(-object->rotation.z), ft_mat4_mult(ft_mat4_rotate_y(-object->rotation.x), ft_mat4_rotate_x(-object->rotation.y)));
 
-	ft_printf("rotate inv\n");
-	ft_print_mat4(rotate2);
+//	ft_printf("rotate inv\n");
+//	ft_print_mat4(rotate2);
 
-	ft_printf("translate inv\n");
-	ft_print_mat4(translate2);
+//	ft_printf("translate inv\n");
+//	ft_print_mat4(translate2);
 
-	ft_printf("scale inv\n");
-	ft_print_mat4(scale2);
+//	ft_printf("scale inv\n");
+//	ft_print_mat4(scale2);
 
 	ft_printf("IDENTITIES\n");
 	ft_print_mat4(ft_mat4_mult(rotate, rotate2));
 	ft_print_mat4(ft_mat4_mult(scale, scale2));
 	ft_print_mat4(ft_mat4_mult(translate, translate2));
 
-	t_mat4 invtransform = ft_mat4_model_view_matrix_mat(scale2, translate2, rotate2);
+	t_mat4 invtransform = ft_mat4_model_view_matrix_mat(scale2, rotate2, translate2);
 
-	ft_printf("TRANSFORM\n");
-	ft_print_mat4(transform);
+//	ft_printf("TRANSFORM\n");
+//	ft_print_mat4(transform);
 
-	ft_printf("INVERSE POS\n");
-	ft_print_mat4(invtransform);
+//	ft_printf("INVERSE POS\n");
+//	ft_print_mat4(invtransform);
 
-	ft_printf("TRANSFORM * INVERSE\n");
-	ft_print_mat4(ft_mat4_mult(invtransform, transform));
+//	ft_printf("TRANSFORM * INVERSE\n");
+//	ft_print_mat4(ft_mat4_mult(invtransform, transform));
 
-	t_mat4 transform_dir = ft_mat4_mult(scale, rotate);
+	t_mat4 transform_dir = ft_mat4_mult(rotate, scale2);
 	t_mat4 transform_dir_inv = ft_mat4_mult(scale2, rotate2);
 
-	ft_printf("INVERSE DIR \n");
-	ft_print_mat4(transform_dir_inv);
+//	ft_printf("INVERSE DIR \n");
+//	ft_print_mat4(transform_dir_inv);
 
-	ft_printf("TRANSFORM * INVERSE\n");
-	ft_print_mat4(ft_mat4_mult(transform_dir_inv, transform_dir));
+//	ft_printf("TRANSFORM * INVERSE\n");
+//	ft_print_mat4(ft_mat4_mult(transform_dir_inv, transform_dir));
 
 	object->transform_pos = transform;
-	object->transform_pos_inv = invtransform;
 	object->transform_dir = transform_dir;
+	
+	object->transform_pos_inv = invtransform;
 	object->transform_dir_inv = transform_dir_inv;
 }
 
@@ -209,7 +209,14 @@ t_intersect ft_intersect_sphere(t_ray ray, t_object *object)
 	b = 2 * ((ray.position.x * ray.direction.x) + (ray.position.y * ray.direction.y) + (ray.position.z * ray.direction.z));
 	c = (ray.position.x * ray.position.x) + (ray.position.y * ray.position.y) + (ray.position.z * ray.position.z) - (object->object_union.sphere.radius * object->object_union.sphere.radius);
 
-	res.t = ft_min_pos((-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a), (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a));
+	if ((b * b) - 4 * (a * c) < 0)
+		res.t = -1;
+	else
+	{
+		res.t = ft_min_pos((-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a), (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a));
+		res.intersection = ft_vec3_add(ft_vec3_scalar(ray.direction, res.t), ray.position);
+		res.normal = res.intersection;
+	}
 	return (res);
 }
 
@@ -219,12 +226,28 @@ t_intersect ft_intersect_cone(t_ray ray, t_object *object)
 	float       b;
 	float       c;
 	t_intersect res;
-
+	
 	res.color = object->color;
-	a = (ray.direction.x * ray.direction.x) + (ray.direction.y * ray.direction.y) - (ray.direction.z * ray.direction.z);
+/*	a = (ray.direction.x * ray.direction.x) + (ray.direction.y * ray.direction.y) - (ray.direction.z * ray.direction.z);
 	b = 2 * ((ray.position.x * ray.direction.x) + (ray.position.y * ray.direction.y) - (ray.position.z * ray.direction.z));
 	c = (ray.position.x * ray.position.x) + (ray.position.y * ray.position.y) - (ray.position.z * ray.position.z);
-	res.t = ft_min_pos((-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a), (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a));
+*/
+	float sangle;
+	float cangle;
+
+	cangle = pow(cos(object->object_union.cone.angle), 2);
+	sangle = pow(sin(object->object_union.cone.angle), 2);
+
+	a = cangle * ((ray.direction.x * ray.direction.x) + (ray.direction.y * ray.direction.y)) - sangle * (ray.direction.z * ray.direction.z);
+	b = 2 * (cangle * ((ray.position.x * ray.direction.x) + (ray.position.y * ray.direction.y)) - sangle * (ray.position.z * ray.direction.z));
+	c = cangle * ((ray.position.x * ray.position.x) + (ray.position.y * ray.position.y)) -  sangle * (ray.position.z * ray.position.z);
+	if ((b * b) - 4 * (a * c) < 0)
+		res.t = -1;
+	else
+	{
+		res.t = ft_min_pos((-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a), (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a));
+		res.intersection = ft_vec3_add(ft_vec3_scalar(ray.direction, res.t), ray.position);
+	}
 	return (res);
 }
 
@@ -243,7 +266,28 @@ t_intersect ft_intersect_cylinder(t_ray ray, t_object *object)
 	if ((b * b) - 4 * (a * c) < 0)
 		res.t = -1;
 	else
+	{
 		res.t = ft_min_pos((-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a), (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a));
+		res.intersection = ft_vec3_add(ft_vec3_scalar(ray.direction, res.t), ray.position);
+		res.normal = ft_new_vec3(res.intersection.x,0,res.intersection.y);
+	}
+	return (res);
+}
+
+t_intersect ft_intersect_plane(t_ray ray, t_object *object)
+{
+	t_intersect res;
+
+	res.color = object->color;
+	
+	if (ray.direction.y == 0)
+		res.t = -1;
+	else
+	{
+		res.t = -ray.position.y / ray.direction.y;
+		res.intersection = ft_vec3_add(ft_vec3_scalar(ray.direction, res.t), ray.position);
+		res.normal = ft_new_vec3(0 , (ray.direction.y > 0 ? -1 : 1), 0);
+	}
 	return (res);
 }
 
@@ -262,12 +306,13 @@ t_object    *ft_new_sphere(float radius, t_vec3 pos, t_vec3 rot, t_vec3 scale, i
 	return (res);
 }
 
-t_object    *ft_new_cone(t_vec3 pos, t_vec3 rot, t_vec3 scale, int color)
+t_object    *ft_new_cone(float angle, t_vec3 pos, t_vec3 rot, t_vec3 scale, int color)
 {
 	t_object *res;
 
 	res = malloc(sizeof(t_object));
 	res->object_enum = e_cone;
+	res->object_union.cone.angle = angle;
 	res->color = color;
 	res->position = pos;
 	res->rotation = rot;
@@ -291,18 +336,17 @@ t_object    *ft_new_cylinder(float radius, t_vec3 pos, t_vec3 rot, t_vec3 scale,
 	return (res);
 }
 
-t_object    *ft_new_plane(float radius, t_vec3 pos, t_vec3 rot, t_vec3 scale, int color)
+t_object    *ft_new_plane(t_vec3 pos, t_vec3 rot, t_vec3 scale, int color)
 {
 	t_object *res;
 
 	res = malloc(sizeof(t_object));
-	res->object_union.cylinder.radius = radius;
-	res->object_enum = e_cylinder;
+	res->object_enum = e_plane;
 	res->color = color;
 	res->position = pos;
 	res->rotation = rot;
 	res->scale = scale;
-	res->intersect_func = &ft_intersect_cylinder;
+	res->intersect_func = &ft_intersect_plane;
 	return (res);
 }
 
@@ -331,16 +375,42 @@ void	ft_init_keys(t_env *e)
 	e->keys.key_shift = 0;
 }
 
+t_spot *ft_new_spot(t_vec3 position)
+{
+	t_spot *res;
+	res = (t_spot *)malloc(sizeof(t_spot));
+	res->position = position;
+	return (res);
+}
+
+int		ft_get_color_reduction(int color, float reduc)
+{
+	int r;
+	int g;
+	int b;
+
+	r = (color >> 16) & (0xff);
+	g = (color >> 8) & (0xff);
+	b = color & (0xff);
+	
+	r = r * reduc;
+	g = g * reduc;
+	b = b * reduc;
+	return ((r << 16) | (g << 8) | b);
+}
+
 void    ft_init_scene(t_env *e)
 {
 	e->objects = NULL;
+	e->spots = NULL;
 	e->cam.fov = (70 * M_PI) / 180.0;
 	e->cam.position = ft_new_vec3(0, 0, 0);
 	e->cam.rotation = ft_new_vec3(0, 0, 0);
 	e->speed = 0.2;
-
+	e->ambiant_coefficient = 0.3;
 	ft_init_keys(e);
-
+	if(0)
+	{
 	//RED
 	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(1.f, ft_new_vec3(0.f, 0.f, 10.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff0000), sizeof(t_object)));
@@ -352,15 +422,40 @@ void    ft_init_scene(t_env *e)
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x00ff00), sizeof(t_object)));
 
 	//BLUE
-	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(1.f, ft_new_vec3(-10.f, 0.f, 10.f),
-					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x0000ff), sizeof(t_object)));
-
-	//  ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(ft_new_vec3(0.f, 0.f, 10.f),
-	//      ft_new_vec3(0.0f, 0.0f, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
-
 	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-20.f, 0.f, 10.f),
-					ft_new_vec3(0.0f, M_PI, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
 
+	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(1.f, ft_new_vec3(-10.f, 0.f, 10.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 2.f, 1.f), 0x0000ff), sizeof(t_object)));
+
+	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, -10.f, 0.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x00ffff), sizeof(t_object)));
+
+	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI / 64, ft_new_vec3(0.f, 0.f, 20.f),
+		ft_new_vec3(0.0f, 0.0f, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
+	}
+	else
+	{
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, -10.f, 0.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x444444), sizeof(t_object)));
+
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 30.f, 50.f),
+					ft_new_vec3(0.0f, M_PI/2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x0000ff), sizeof(t_object)));
+
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 10.f, 0.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x444444), sizeof(t_object)));
+
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-10.f, 0.f, 20.f),
+					ft_new_vec3(0.0f,M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(10.f, 0.f, 20.f),
+					ft_new_vec3(0.0f,M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+	
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(2.f, ft_new_vec3(0.f, 0.f, 20.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff0000), sizeof(t_object)));
+		
+	}
+	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(0.f, -5.f, 20.f)), sizeof(t_spot)));
 	e->selected_object = (t_object *)(e->objects->content);
 	ft_compute_matrices_list(e->objects);
 }
@@ -377,18 +472,26 @@ void    ft_render(t_env *e)
 	int *pix;
 	t_mat4 cam_rot;
 	t_list *ptr;
+	
 	ft_compute_matrices_list(e->objects);
 	SDL_LockSurface(e->sdl.surface);
 	pix = (int *)e->sdl.surface->pixels;
 	//cam_rot = ft_mat4_rotate_vec(e->cam.rotation);
 	cam_rot = ft_mat4_mult(ft_mat4_rotate_x(e->cam.rotation.y), ft_mat4_mult(ft_mat4_rotate_y(e->cam.rotation.x), ft_mat4_rotate_z(e->cam.rotation.z)));
 	cam_rot = ft_mat4_transpose(cam_rot);
-	ft_print_mat4(cam_rot);
+	//	ft_print_mat4(cam_rot);
 	//  t_mat4 rotate_inv = ft_mat4_mult(ft_mat4_rotate_z(-e->cam.rotation.z), ft_mat4_mult(ft_mat4_rotate_y(-e->cam.rotation.y), ft_mat4_rotate_x(-e->cam.rotation.x)));
 	//  ft_print_mat4(ft_mat4_mult(cam_rot, rotate_inv));
 	int i;
 	int j;
-	int step = 8;
+	t_vec3 c;
+	t_vec3 n;
+	t_vec3	normal;
+	t_object *intersected_object;
+	t_spot	*spot;
+	t_ray	light_ray;
+	(void)normal;
+	int step = 1;
 	i = 0;
 	while (i < e->sdl.screen.h)
 	{
@@ -404,20 +507,50 @@ void    ft_render(t_env *e)
 				object = (t_object *)(ptr->content);
 				ray.position = ft_vec3_mat4_mult(e->cam.position, object->transform_pos_inv);
 				ray.direction = ft_vec3_mat4_mult(ft_vec3_mat4_mult(ft_new_vec3(px, py, 1), cam_rot), object->transform_dir_inv);
-			//	ft_vec3_normalize(&(ray.direction));
+				ft_vec3_normalize(&(ray.direction));
 				intersect = object->intersect_func(ray, object);
 				if (intersect.t > 0 && (intersect.t < min.t || min.t == -1))
+				{
 					min = intersect;
+					intersected_object = object;
+				}
 				ptr = ptr->next;
 			}
 			if (min.t > 0)
 				pix[e->sdl.screen.w * i + j] = min.color;
+			if (min.t != -1)
+			{
+				c = ft_vec3_mat4_mult(min.intersection, intersected_object->transform_pos);
+				n = ft_vec3_mat4_mult(min.normal, intersected_object->transform_dir);
+			//	ft_print_vec3(c);
+			//	ft_print_vec3(min.normal);
+			//	if (i == 760 && j == 1304)
+			//	{
+			//		ft_printf("Intersection\n");
+			//		ft_print_vec3(c);
+			//		ft_printf("normal\n");
+			//		ft_print_vec3(n);
+			//	}
+				ptr = e->spots;
+				while (ptr != NULL)
+				{
+					spot = (t_spot *)(ptr->content);
+					light_ray.position = spot->position;
+					light_ray.direction = ft_vec3_cmp(light_ray.position, c);
+					ft_vec3_normalize(&(light_ray.direction));
+				//	ft_print_vec3(light_ray.direction);
+					ft_vec3_normalize(&n);
+					//printf("%f\n", -ft_dot_product(light_ray.direction, n));
+					pix[e->sdl.screen.w * i + j] = ft_get_color_reduction(min.color, e->ambiant_coefficient + (1 - e->ambiant_coefficient) * ft_fclamp(0, ft_dot_product(light_ray.direction, n), 1));
+					ptr = ptr->next;
+				}	
+			}
 			j += step;
 		}
 		i += step;
 	}
 	if (!(e->sdl.texture = SDL_CreateTextureFromSurface(e->sdl.renderer,
-											e->sdl.surface)))
+		e->sdl.surface)))
 		exit(1);
 	SDL_FillRect(e->sdl.surface, NULL, 0x000000);
 	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &(e->sdl.screen));
@@ -431,6 +564,7 @@ void	ft_loop(t_env *e)
 	ft_init_scene(e);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	end = 0;
+	ft_render(e);
 	while (!end)
 	{
 		while (SDL_PollEvent(&event)) {

@@ -72,9 +72,10 @@ typedef struct 		s_test
 typedef struct		s_intersect
 {
 	int				color;
+	t_vec3			intersection;
+	t_vec3			normal;
 	float			t;
 }					t_intersect;
-
 
 typedef enum	e_object_enum
 {
@@ -107,6 +108,11 @@ struct				s_object
 	t_intersect		(*intersect_func)(t_ray, t_object *);
 };
 
+typedef struct		s_spot
+{
+	t_vec3			position;
+}					t_spot;
+
 typedef struct		s_env 
 {
 	t_sdl			sdl;
@@ -114,8 +120,10 @@ typedef struct		s_env
 	t_keys			keys;
 	t_test			test;
 	t_camera		cam;
+	float			ambiant_coefficient;
 	float			speed;
 	t_list			*objects;
+	t_list			*spots;
 	t_object		*selected_object;
 }					t_env;
 
