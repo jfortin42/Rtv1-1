@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/16 16:10:44 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/16 19:05:09 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -407,7 +407,7 @@ void    ft_init_scene(t_env *e)
 	e->objects = NULL;
 	e->spots = NULL;
 	e->cam.fov = (70 * M_PI) / 180.0;
-	e->cam.position = ft_new_vec3(0, 0, -20);
+	e->cam.position = ft_new_vec3(0, 0, -30);
 	e->cam.rotation = ft_new_vec3(0, 0, 0);
 	e->speed = 0.2;
 	e->ambiant_coefficient = 0.3;
@@ -470,8 +470,10 @@ void    ft_init_scene(t_env *e)
 	//		ft_new_vec3(0.0f, M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
 
 	}
-	//ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(2.f, 0.f, 0.f)), sizeof(t_spot)));
-	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-5.f, 0.f, 10.f)), sizeof(t_spot)));
+	
+	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(20.f, 0.f, 0.f)), sizeof(t_spot)));
+	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-20.f, 0.f, 0.f)), sizeof(t_spot)));
+	
 	e->selected_object = (t_object *)(e->objects->content);
 	ft_compute_matrices_list(e->objects);
 }
@@ -519,7 +521,8 @@ void    ft_render(t_env *e)
 	int *pix;
 	t_mat4 cam_rot;
 	t_list *ptr;
-	
+	int shadows;
+
 	ft_compute_matrices_list(e->objects);
 	SDL_LockSurface(e->sdl.surface);
 	pix = (int *)e->sdl.surface->pixels;
@@ -536,7 +539,8 @@ void    ft_render(t_env *e)
 	t_object *intersected_object;
 	t_spot	*spot;
 	t_ray	light_ray;
-	int step = 8;
+	float max_dot_prod;
+	int step = 1;
 	i = 0;
 	while (i < e->sdl.screen.h)
 	{
@@ -577,21 +581,21 @@ void    ft_render(t_env *e)
 			//		ft_print_vec3(n);
 			//	}
 				ptr = e->spots;
+				shadows = 0;
+				max_dot_prod = -1;
 				while (ptr != NULL)
 				{
 					spot = (t_spot *)(ptr->content);
 					light_ray.position = spot->position;
 					light_ray.direction = ft_vec3_cmp(c, light_ray.position);
 					ft_vec3_normalize(&(light_ray.direction));
-				//	ft_print_vec3(light_ray.direction);
 					ft_vec3_normalize(&n);
-					//printf("%f\n", -ft_dot_product(light_ray.direction, n));
-					if (!ft_intersect_objects(e->objects, light_ray, intersected_object))
-						pix[e->sdl.screen.w * i + j] = ft_get_color_reduction(min.color, e->ambiant_coefficient + (1 - e->ambiant_coefficient) * ft_fclamp(0, -ft_dot_product(light_ray.direction, n), 1));
-					else
-						pix[e->sdl.screen.w * i + j] = ft_get_color_reduction(min.color, e->ambiant_coefficient);
+					shadows += ft_intersect_objects(e->objects, light_ray, intersected_object);
+					if (max_dot_prod < -ft_dot_product(light_ray.direction, n))
+						max_dot_prod = -ft_dot_product(light_ray.direction, n);
 					ptr = ptr->next;
 				}
+				pix[e->sdl.screen.w * i + j] = ft_get_color_reduction(min.color, e->ambiant_coefficient + (1 - ((float)shadows / (float)ft_lstlength(e->spots))) * (1 - e->ambiant_coefficient) * ft_fclamp(0, max_dot_prod, 1));
 			}
 			j += step;
 		}
@@ -627,8 +631,8 @@ void	ft_loop(t_env *e)
 					 && event.type == SDL_KEYDOWN))
 				end = 1;
 		}
-		//ft_process(e);
-		ft_render(e);
+		ft_process(e);
+		//ft_render(e);
 		SDL_Delay(12);
 	}
 }
