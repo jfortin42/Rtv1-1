@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/16 02:39:51 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/16 16:10:44 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,15 +238,18 @@ t_intersect ft_intersect_cone(t_ray ray, t_object *object)
 	cangle = pow(cos(object->object_union.cone.angle), 2);
 	sangle = pow(sin(object->object_union.cone.angle), 2);
 
-	a = cangle * ((ray.direction.x * ray.direction.x) + (ray.direction.y * ray.direction.y)) - sangle * (ray.direction.z * ray.direction.z);
-	b = 2 * (cangle * ((ray.position.x * ray.direction.x) + (ray.position.y * ray.direction.y)) - sangle * (ray.position.z * ray.direction.z));
-	c = cangle * ((ray.position.x * ray.position.x) + (ray.position.y * ray.position.y)) -  sangle * (ray.position.z * ray.position.z);
+	a = cangle * ((ray.direction.z * ray.direction.z) + (ray.direction.y * ray.direction.y)) - sangle * (ray.direction.x * ray.direction.x);
+	b = 2 * (cangle * ((ray.position.z * ray.direction.z) + (ray.position.y * ray.direction.y)) - sangle * (ray.position.x * ray.direction.x));
+	c = cangle * ((ray.position.z * ray.position.z) + (ray.position.y * ray.position.y)) -  sangle * (ray.position.x * ray.position.x);
 	if ((b * b) - 4 * (a * c) < 0)
 		res.t = -1;
 	else
 	{
 		res.t = ft_min_pos((-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a), (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a));
 		res.intersection = ft_vec3_add(ft_vec3_scalar(ray.direction, res.t), ray.position);
+		res.normal.x = sqrt(ray.position.x * ray.position.x + ray.position.y * ray.position.y) * tan(object->object_union.cone.angle);
+		res.normal.y = ray.position.y;
+		res.normal.z = ray.position.z;
 	}
 	return (res);
 }
@@ -259,9 +262,9 @@ t_intersect ft_intersect_cylinder(t_ray ray, t_object *object)
 	t_intersect res;
 
 	res.color = object->color;
-	a = (ray.direction.x * ray.direction.x) + (ray.direction.y * ray.direction.y);
-	b = 2 * ((ray.position.x * ray.direction.x) + (ray.position.y * ray.direction.y));
-	c = (ray.position.x * ray.position.x) + (ray.position.y * ray.position.y) - (object->object_union.cylinder.radius * object->object_union.cylinder.radius);
+	a = (ray.direction.z * ray.direction.z) + (ray.direction.y * ray.direction.y);
+	b = 2 * ((ray.position.z * ray.direction.z) + (ray.position.y * ray.direction.y));
+	c = (ray.position.z * ray.position.z) + (ray.position.y * ray.position.y) - (object->object_union.cylinder.radius * object->object_union.cylinder.radius);
 
 	if ((b * b) - 4 * (a * c) < 0)
 		res.t = -1;
@@ -269,7 +272,7 @@ t_intersect ft_intersect_cylinder(t_ray ray, t_object *object)
 	{
 		res.t = ft_min_pos((-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a), (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a));
 		res.intersection = ft_vec3_add(ft_vec3_scalar(ray.direction, res.t), ray.position);
-		res.normal = ft_new_vec3(res.intersection.x, 0, res.intersection.y);
+		res.normal = ft_new_vec3(0, res.intersection.y, res.intersection.z);
 	}
 	return (res);
 }
@@ -404,7 +407,7 @@ void    ft_init_scene(t_env *e)
 	e->objects = NULL;
 	e->spots = NULL;
 	e->cam.fov = (70 * M_PI) / 180.0;
-	e->cam.position = ft_new_vec3(0, 0, 0);
+	e->cam.position = ft_new_vec3(0, 0, -20);
 	e->cam.rotation = ft_new_vec3(0, 0, 0);
 	e->speed = 0.2;
 	e->ambiant_coefficient = 0.3;
@@ -440,22 +443,35 @@ void    ft_init_scene(t_env *e)
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x444444), sizeof(t_object)));
 
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 30.f, 50.f),
-					ft_new_vec3(0.0f, M_PI/2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x0000ff), sizeof(t_object)));
+					ft_new_vec3(0.0f, M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x0000ff), sizeof(t_object)));
 
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 10.f, 0.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x444444), sizeof(t_object)));
 
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-10.f, 0.f, 20.f),
-					ft_new_vec3(0.0f,M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-20.f, -10.f, 20.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
 
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(10.f, 0.f, 20.f),
-					ft_new_vec3(0.0f,M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI / 16, ft_new_vec3(-10.f, 0.f, 20.f),
+			ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
+
+//		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-10.f, -10.f, 20.f),
+//					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+		
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(10.f, -10.f, 20.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+		
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(20.f, 0.f, 20.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
 	
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(2.f, ft_new_vec3(0.f, 0.f, 20.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff0000), sizeof(t_object)));
-		
+	
+	//	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI / 16, ft_new_vec3(5.f, 0.f, 20.f),
+	//		ft_new_vec3(0.0f, M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
+
 	}
-	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(10.f, -5.f, 10.f)), sizeof(t_spot)));
+	//ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(2.f, 0.f, 0.f)), sizeof(t_spot)));
+	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-5.f, 0.f, 10.f)), sizeof(t_spot)));
 	e->selected_object = (t_object *)(e->objects->content);
 	ft_compute_matrices_list(e->objects);
 }
@@ -517,11 +533,9 @@ void    ft_render(t_env *e)
 	int j;
 	t_vec3 c;
 	t_vec3 n;
-	t_vec3	normal;
 	t_object *intersected_object;
 	t_spot	*spot;
 	t_ray	light_ray;
-	(void)normal;
 	int step = 8;
 	i = 0;
 	while (i < e->sdl.screen.h)
@@ -613,7 +627,7 @@ void	ft_loop(t_env *e)
 					 && event.type == SDL_KEYDOWN))
 				end = 1;
 		}
-		ft_process(e);
+		//ft_process(e);
 		ft_render(e);
 		SDL_Delay(12);
 	}
