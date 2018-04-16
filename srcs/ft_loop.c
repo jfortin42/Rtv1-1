@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/16 01:29:56 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/16 02:39:51 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ float ft_min_pos(float a, float b)
 		return a;
 	if (b < a && b >= 0)
 		return b;
-	return ((ft_fmin(a, b)));
+	return (-1);
 }
 
 t_intersect ft_intersect_sphere(t_ray ray, t_object *object)
@@ -269,7 +269,7 @@ t_intersect ft_intersect_cylinder(t_ray ray, t_object *object)
 	{
 		res.t = ft_min_pos((-b - sqrt((b * b) - (4.0 * a * c))) / (2.0 * a), (-b + sqrt((b * b) - (4.0 * a * c))) / (2.0 * a));
 		res.intersection = ft_vec3_add(ft_vec3_scalar(ray.direction, res.t), ray.position);
-		res.normal = ft_new_vec3(res.intersection.x,0,res.intersection.y);
+		res.normal = ft_new_vec3(res.intersection.x, 0, res.intersection.y);
 	}
 	return (res);
 }
@@ -409,7 +409,7 @@ void    ft_init_scene(t_env *e)
 	e->speed = 0.2;
 	e->ambiant_coefficient = 0.3;
 	ft_init_keys(e);
-	if(0)
+	if (0)
 	{
 	//RED
 	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(1.f, ft_new_vec3(0.f, 0.f, 10.f),
@@ -455,9 +455,40 @@ void    ft_init_scene(t_env *e)
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff0000), sizeof(t_object)));
 		
 	}
-	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(0.f, -5.f, 20.f)), sizeof(t_spot)));
+	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(10.f, -5.f, 10.f)), sizeof(t_spot)));
 	e->selected_object = (t_object *)(e->objects->content);
 	ft_compute_matrices_list(e->objects);
+}
+
+int		ft_intersect_objects(t_list *objects, t_ray ray, t_object *except)
+{
+	t_list *ptr;
+	t_intersect intersect;
+	float value;
+	t_object *object;
+	t_ray save;
+	
+	save = ray;
+	ray.direction = ft_vec3_mat4_mult(save.direction, except->transform_dir_inv);
+	ray.position = ft_vec3_mat4_mult(save.position, except->transform_pos_inv);
+	intersect = except->intersect_func(ray, except);
+	value = intersect.t;
+
+	ptr = objects;
+	while (ptr != NULL)
+	{
+		object = (t_object *)(ptr->content);
+		ray.direction = ft_vec3_mat4_mult(save.direction, object->transform_dir_inv);
+		ray.position = ft_vec3_mat4_mult(save.position, object->transform_pos_inv);
+		if (object != except)
+		{
+			intersect = object->intersect_func(ray, object);
+			if (intersect.t > 0 && intersect.t < value )
+				return (1);
+		}
+		ptr = ptr->next;
+	}
+	return (0);
 }
 
 void    ft_render(t_env *e)
@@ -491,7 +522,7 @@ void    ft_render(t_env *e)
 	t_spot	*spot;
 	t_ray	light_ray;
 	(void)normal;
-	int step = 1;
+	int step = 8;
 	i = 0;
 	while (i < e->sdl.screen.h)
 	{
@@ -536,14 +567,17 @@ void    ft_render(t_env *e)
 				{
 					spot = (t_spot *)(ptr->content);
 					light_ray.position = spot->position;
-					light_ray.direction = ft_vec3_cmp(light_ray.position, c);
+					light_ray.direction = ft_vec3_cmp(c, light_ray.position);
 					ft_vec3_normalize(&(light_ray.direction));
 				//	ft_print_vec3(light_ray.direction);
 					ft_vec3_normalize(&n);
 					//printf("%f\n", -ft_dot_product(light_ray.direction, n));
-					pix[e->sdl.screen.w * i + j] = ft_get_color_reduction(min.color, e->ambiant_coefficient + (1 - e->ambiant_coefficient) * ft_fclamp(0, ft_dot_product(light_ray.direction, n), 1));
+					if (!ft_intersect_objects(e->objects, light_ray, intersected_object))
+						pix[e->sdl.screen.w * i + j] = ft_get_color_reduction(min.color, e->ambiant_coefficient + (1 - e->ambiant_coefficient) * ft_fclamp(0, -ft_dot_product(light_ray.direction, n), 1));
+					else
+						pix[e->sdl.screen.w * i + j] = ft_get_color_reduction(min.color, e->ambiant_coefficient);
 					ptr = ptr->next;
-				}	
+				}
 			}
 			j += step;
 		}
