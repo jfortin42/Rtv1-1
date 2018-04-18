@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/18 02:34:44 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/18 20:27:06 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,9 +416,9 @@ int		ft_color_add(int color, float to_add)
 //	if (reduc > 1)
 //		return (0xffffff);
 //	return (ft_clamp(0, color * reduc, 0xffffff));	
-	r = ft_clamp(0, r + to_add, 255);
-	g = ft_clamp(0, g + to_add, 255);
-	b = ft_clamp(0, b + to_add, 255);
+	r = ft_clamp(0, r + (255 * to_add), 255);
+	g = ft_clamp(0, g + (255 * to_add), 255);
+	b = ft_clamp(0, b + (255 * to_add), 255);
 	return ((r << 16) | (g << 8) | b);
 }
 
@@ -654,12 +654,12 @@ void    ft_render(t_env *e)
 						v = ft_vec3_cmp(c, e->cam.position);
 						ft_vec3_normalize(&v);
 						ft_vec3_normalize(&rm);
-						specular_factor += pow(ft_fmax(0, ft_dot_product(v, rm)), 100);
+						specular_factor += pow(ft_fmax(0, ft_dot_product(v, rm)), 20);
 						//specular_factor += ft_dot_product(rm, v);
 					}
 					ptr = ptr->next;
 				}
-				pix[e->sdl.screen.w * i + j] = ft_color_add(ft_get_color_reduction(min.color, 0.2 + 0.8 * ft_fclamp(0, diffuse_factor, 1)), 300 * specular_factor);
+				pix[e->sdl.screen.w * i + j] = ft_color_add(ft_get_color_reduction(min.color, 0.2 + 0.8 * ft_fclamp(0, diffuse_factor, 1)), 1 * specular_factor);
 			}
 			j += step;
 		}
