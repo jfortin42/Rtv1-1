@@ -6,7 +6,7 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/04/16 01:30:52 by ldedier          ###   ########.fr        #
+#    Updated: 2018/04/17 00:28:07 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ DEBUG ?= 0
 
 ifeq ($(DEBUG), 1)
 	CFLAGS += -DDEBUG -fsanitize=address
+else
+	CFLAGS += -Ofast
 endif
 
 SRCDIR   = srcs

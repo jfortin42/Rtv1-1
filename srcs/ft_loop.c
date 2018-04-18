@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/16 19:05:09 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/04/18 02:34:44 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -395,10 +395,30 @@ int		ft_get_color_reduction(int color, float reduc)
 	r = (color >> 16) & (0xff);
 	g = (color >> 8) & (0xff);
 	b = color & (0xff);
-	
-	r = r * reduc;
-	g = g * reduc;
-	b = b * reduc;
+//	if (reduc > 1)
+//		return (0xffffff);
+//	return (ft_clamp(0, color * reduc, 0xffffff));	
+	r = ft_clamp(0, r * reduc, 255);
+	g = ft_clamp(0, g * reduc, 255);
+	b = ft_clamp(0, b * reduc, 255);
+	return ((r << 16) | (g << 8) | b);
+}
+
+int		ft_color_add(int color, float to_add)
+{
+	int r;
+	int g;
+	int b;
+
+	r = (color >> 16) & (0xff);
+	g = (color >> 8) & (0xff);
+	b = color & (0xff);
+//	if (reduc > 1)
+//		return (0xffffff);
+//	return (ft_clamp(0, color * reduc, 0xffffff));	
+	r = ft_clamp(0, r + to_add, 255);
+	g = ft_clamp(0, g + to_add, 255);
+	b = ft_clamp(0, b + to_add, 255);
 	return ((r << 16) | (g << 8) | b);
 }
 
@@ -407,7 +427,7 @@ void    ft_init_scene(t_env *e)
 	e->objects = NULL;
 	e->spots = NULL;
 	e->cam.fov = (70 * M_PI) / 180.0;
-	e->cam.position = ft_new_vec3(0, 0, -30);
+	e->cam.position = ft_new_vec3(0, 0, -10);
 	e->cam.rotation = ft_new_vec3(0, 0, 0);
 	e->speed = 0.2;
 	e->ambiant_coefficient = 0.3;
@@ -442,38 +462,75 @@ void    ft_init_scene(t_env *e)
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, -10.f, 0.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x444444), sizeof(t_object)));
 
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 30.f, 50.f),
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 30.f, 55.f),
 					ft_new_vec3(0.0f, M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x0000ff), sizeof(t_object)));
 
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 10.f, 0.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x444444), sizeof(t_object)));
 
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-20.f, -10.f, 20.f),
+
+
+
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-10.f, 0.f, 40.f),
 					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
 
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI / 16, ft_new_vec3(-10.f, 0.f, 20.f),
-			ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(-10.f, 10.f, 40.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+		
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(-10.f, -10.f, 40.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
 
-//		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-10.f, -10.f, 20.f),
-//					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
-		
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(10.f, -10.f, 20.f),
-					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
-		
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(20.f, 0.f, 20.f),
+
+
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(10.f, 0.f, 40.f),
 					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
 	
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(2.f, ft_new_vec3(0.f, 0.f, 20.f),
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f, 10.f, 40.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+		
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f, -10.f, 40.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+
+//		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI / 16, ft_new_vec3(-10.f, 0.f, 20.f),						
+//			ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
+
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-10.f, 0.f,10.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+	
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(-10.f, 10.f, 10.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+		
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(-10.f, -10.f, 10.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+
+		
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(10.f, 0.f, 10.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 2), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));	
+		
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f, 10.f, 10.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+		
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f, -10.f, 10.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0x777777), sizeof(t_object)));
+
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(1.f, ft_new_vec3(0.f, -8.f, 13.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff0000), sizeof(t_object)));
 	
 	//	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI / 16, ft_new_vec3(5.f, 0.f, 20.f),
 	//		ft_new_vec3(0.0f, M_PI / 2, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff00ff), sizeof(t_object)));
-
 	}
+	//	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(0.5f, ft_new_vec3(-15.f, 8.f, 5.f),
+	//				ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff0000), sizeof(t_object)));
+
+//	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-30.f, 6.f, 5.f)), sizeof(t_spot)));
 	
-	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(20.f, 0.f, 0.f)), sizeof(t_spot)));
-	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-20.f, 0.f, 0.f)), sizeof(t_spot)));
-	
+	//ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-21.f, 0.f, -8.f)), sizeof(t_spot)));
+	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(21.f, 0.f, -8.f)), sizeof(t_spot)));
+
+//		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(0.5f, ft_new_vec3(-12.f, 0.f, -10.f),
+//					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff0000), sizeof(t_object)));
+//	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(0.f, 0.f, -10.f)), sizeof(t_spot)));
+
 	e->selected_object = (t_object *)(e->objects->content);
 	ft_compute_matrices_list(e->objects);
 }
@@ -521,7 +578,6 @@ void    ft_render(t_env *e)
 	int *pix;
 	t_mat4 cam_rot;
 	t_list *ptr;
-	int shadows;
 
 	ft_compute_matrices_list(e->objects);
 	SDL_LockSurface(e->sdl.surface);
@@ -539,8 +595,19 @@ void    ft_render(t_env *e)
 	t_object *intersected_object;
 	t_spot	*spot;
 	t_ray	light_ray;
-	float max_dot_prod;
+	
+	t_vec3	rm;
+	t_vec3	v;
+	float alpha;
+
+	float diffuse_factor;
+	float specular_factor;
 	int step = 1;
+
+	if (e->mode == 0)
+		step = 8;
+
+	alpha = 1;
 	i = 0;
 	while (i < e->sdl.screen.h)
 	{
@@ -565,24 +632,13 @@ void    ft_render(t_env *e)
 				}
 				ptr = ptr->next;
 			}
-			if (min.t > 0)
-				pix[e->sdl.screen.w * i + j] = min.color;
 			if (min.t != -1)
 			{
 				c = ft_vec3_mat4_mult(min.intersection, intersected_object->transform_pos);
 				n = ft_vec3_mat4_mult(min.normal, intersected_object->transform_dir);
-			//	ft_print_vec3(c);
-			//	ft_print_vec3(min.normal);
-			//	if (i == 760 && j == 1304)
-			//	{
-			//		ft_printf("Intersection\n");
-			//		ft_print_vec3(c);
-			//		ft_printf("normal\n");
-			//		ft_print_vec3(n);
-			//	}
 				ptr = e->spots;
-				shadows = 0;
-				max_dot_prod = -1;
+				diffuse_factor = 0;
+				specular_factor = 0;
 				while (ptr != NULL)
 				{
 					spot = (t_spot *)(ptr->content);
@@ -590,12 +646,20 @@ void    ft_render(t_env *e)
 					light_ray.direction = ft_vec3_cmp(c, light_ray.position);
 					ft_vec3_normalize(&(light_ray.direction));
 					ft_vec3_normalize(&n);
-					shadows += ft_intersect_objects(e->objects, light_ray, intersected_object);
-					if (max_dot_prod < -ft_dot_product(light_ray.direction, n))
-						max_dot_prod = -ft_dot_product(light_ray.direction, n);
+					if (!ft_intersect_objects(e->objects, light_ray, intersected_object))
+					{
+						//if (max_dot_prod < ft_fclamp(0, -ft_dot_product(light_ray.direction, n), 1))
+						diffuse_factor += ft_fmax(0, ft_dot_product(ft_vec3_scalar(light_ray.direction, -1), n));
+						rm = ft_vec3_cmp(ft_vec3_scalar(n, 2 *  (ft_dot_product(light_ray.direction, n))), light_ray.direction);
+						v = ft_vec3_cmp(c, e->cam.position);
+						ft_vec3_normalize(&v);
+						ft_vec3_normalize(&rm);
+						specular_factor += pow(ft_fmax(0, ft_dot_product(v, rm)), 100);
+						//specular_factor += ft_dot_product(rm, v);
+					}
 					ptr = ptr->next;
 				}
-				pix[e->sdl.screen.w * i + j] = ft_get_color_reduction(min.color, e->ambiant_coefficient + (1 - ((float)shadows / (float)ft_lstlength(e->spots))) * (1 - e->ambiant_coefficient) * ft_fclamp(0, max_dot_prod, 1));
+				pix[e->sdl.screen.w * i + j] = ft_color_add(ft_get_color_reduction(min.color, 0.2 + 0.8 * ft_fclamp(0, diffuse_factor, 1)), 300 * specular_factor);
 			}
 			j += step;
 		}
@@ -631,8 +695,11 @@ void	ft_loop(t_env *e)
 					 && event.type == SDL_KEYDOWN))
 				end = 1;
 		}
-		ft_process(e);
-		//ft_render(e);
+		if(e->mode == 0)
+		{
+			ft_process(e);
+			ft_render(e);
+		}
 		SDL_Delay(12);
 	}
 }

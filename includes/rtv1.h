@@ -122,6 +122,7 @@ typedef struct		s_env
 	t_camera		cam;
 	float			ambiant_coefficient;
 	float			speed;
+	int				mode;
 	t_list			*objects;
 	t_list			*spots;
 	t_object		*selected_object;
