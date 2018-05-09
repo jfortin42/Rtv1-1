@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/16 15:48:40 by aherriau          #+#    #+#             */
-/*   Updated: 2018/04/16 15:59:10 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/04/24 18:22:41 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,15 @@ float	ft_magnitude_v3d(t_v3d v)
 void	ft_normalize_v3d(t_v3d *v)
 {
 	float	mag;
+	float	inv_mag;
 
-	mag = ft_magnitude_v3d(*v);
-	if (mag)
+	mag = v->x * v->x + v->y * v->y + v->z * v->z;
+	if (mag > 0)
 	{
-		v->x /= mag;
-		v->y /= mag;
-		v->z /= mag;
+		inv_mag = 1 / (float)sqrt(mag); //cast en float necessaire?
+		v->x *= inv_mag;
+		v->y *= inv_mag;
+		v->z *= inv_mag;
 	}
 }
 
