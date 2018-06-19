@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 12:34:10 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/19 18:40:58 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/19 19:25:18 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,40 +56,128 @@ void    ft_init_scene(t_env *e)
 	e->speed = 0.2;
 	e->ambiant_coefficient = 0.3;
 	ft_init_keys(e);
+	t_object *obj;
 	if (e->scene == 1)
 	{
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(3.0, ft_new_vec3(0.f, 0.f, 0.f),
+					ft_new_vec3(0.0f, 0.0f, 0.0f), 0xff0000), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 80;
+		obj->shininess = 10;
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(15.f, 2.f, -10.f)), sizeof(t_spot)));
+	}
+	else if (e->scene == 2)
+	{
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, -10.f, 0.f),
-					ft_new_vec3(0.0f, 0.0, 0.0f), 0x444444), sizeof(t_object)));
+					ft_new_vec3(0.0f, 0.0f, 0.0f), 0x0000ff), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 80;
+		obj->shininess = 10;
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-10.f, 10.f, -10.f)), sizeof(t_spot)));
+	}
+	else if (e->scene == 3)
+	{
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(5.0, ft_new_vec3(0.f, 0.f, 0.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 2), 0x00ff00), sizeof(t_object)));
+	}
+	else if (e->scene == 4)
+	{
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI * 0.1, ft_new_vec3(0.f, 0.f, 0.f),
+					ft_new_vec3(0.0f, 0.0f, 0.0f), 0xffff00), sizeof(t_object)));
+	}
+	else if (e->scene == 5)
+	{
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, -10.f, 0.f),
+					ft_new_vec3(0.0f, 0.0f, 0.0f), 0x444444), sizeof(t_object)));
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 30.f, 55.f),
+					ft_new_vec3(0.0f, M_PI / 2, 0.0f), 0x0000ff), sizeof(t_object)));
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(5.0, ft_new_vec3(0.f, -6.5f, 20.f),
+					ft_new_vec3(0.0f, 0.0f, 0.0f), 0xff0000), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 50;
+		obj->shininess = 10;
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(5.0, ft_new_vec3(-3.f, 0.f, 24.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 4), 0x00ff00), sizeof(t_object)));
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI * 0.22, ft_new_vec3(7.f, -5.f, 20.f),
+					ft_new_vec3(0.0f, 0.0f, -M_PI / 3), 0xffff00), sizeof(t_object)));
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(30.f, 0.f, 0.f)), sizeof(t_spot)));
+	}
+	else if (e->scene == 6)
+	{
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, -10.f, 0.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), 0x888888), sizeof(t_object)));
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 30.f, 55.f),
 					ft_new_vec3(0.0f, M_PI / 2, 0.0f), 0x0000ff), sizeof(t_object)));
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_plane(ft_new_vec3(0.f, 10.f, 0.f),
-					ft_new_vec3(0.0f, 0.0, 0.0f), 0x444444), sizeof(t_object)));
+					ft_new_vec3(0.0f, 0.0, 0.0f), 0x222222), sizeof(t_object)));
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-10.f, 0.f, 40.f),
 					ft_new_vec3(0.0f, 0.0f, M_PI / 2), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(-10.f, 10.f, 40.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(-10.f, -10.f, 40.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(10.f, 0.f, 40.f),
 					ft_new_vec3(0.0f, 0.0f, M_PI / 2), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f, 10.f, 40.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f, -10.f, 40.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(-10.f, 0.f,10.f),
 					ft_new_vec3(0.0f, 0.0f, M_PI / 2), 0x777777), sizeof(t_object)));
-		//100, 20
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(-10.f, 10.f, 10.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(-10.f, -10.f, 10.f),
 					ft_new_vec3(0.0f, 0.0, 0.0f), 0x777777), sizeof(t_object)));
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI * 0.1, ft_new_vec3(10.f, 0.f, 10.f),
-					ft_new_vec3(0.0f, 0, M_PI / 2), 0x0000ff), sizeof(t_object)));
-		//100, 10
-	//	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(10.0, ft_new_vec3(0.f, 10.f, 10.f),
-	//				ft_new_vec3(0.0f, 0.0, 0.0f), 0xFF0000), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0, ft_new_vec3(10.f, 0.f,10.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 2), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f, 10.f, 10.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f, -10.f, 10.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), 0x777777), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(1.f, ft_new_vec3(0.f, -8.f, 12.f),
+						ft_new_vec3(0.0f, 0.0, 0.0f), 0xff0000), sizeof(t_object)));
+		obj = (t_object *)(e->objects->content);
+		obj->smoothness = 100;
+		obj->shininess = 10;
+
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-20.f, -2.f, -10.f)), sizeof(t_spot)));
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(20.f, -2.f, -10.f)), sizeof(t_spot)));
 	}
-	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-10.f, 0.f, 5.f)), sizeof(t_spot)));
-//	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(10.f, -4.f, 6.f)), sizeof(t_spot)));
 	e->selected_object = (t_object *)(e->objects->content);
 }
