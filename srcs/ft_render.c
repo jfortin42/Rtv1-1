@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 13:15:47 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/19 21:25:32 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/19 21:59:31 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,12 @@ void    ft_render(t_env *e)
 				{
 					spot = (t_spot *)(ptr->content);
 					ft_vec3_normalize(&(hit.world_normal));
-		//			light_ray.position = ft_vec3_add(hit.world_point, ft_vec3_scalar(ray.direction, -0.001));
 					light_ray.position = spot->position;
 					light_ray.direction = ft_vec3_cmp(hit.world_point, light_ray.position);
-
-		//			light_ray.direction = ft_vec3_cmp(spot->position, light_ray.position);
 					float light_inter_dist = ft_magnitude(light_ray.direction);
 					ft_vec3_normalize(&(light_ray.direction));
 					hit2 = ft_trace(light_ray, e);
-					if (hit2.t >= light_inter_dist - 0.2)
+					if (hit2.t >= light_inter_dist - 0.1)
 					{
 						light_ray.direction = ft_vec3_cmp(hit.world_point, spot->position);
 						ft_vec3_normalize(&(light_ray.direction));
@@ -125,7 +122,7 @@ void    ft_render(t_env *e)
 						v = ft_vec3_cmp(hit.world_point, e->cam.position);
 						ft_vec3_normalize(&v);
 						ft_vec3_normalize(&rm);
-						specular_factor += pow(ft_fmax(0, ft_dot_product(v, rm)), hit.object->smoothness);
+						specular_factor += pow(ft_fmax(0, ft_dot_product(light_ray.direction, rm)), hit.object->smoothness);
 					}
 					ptr = ptr->next;
 				}
