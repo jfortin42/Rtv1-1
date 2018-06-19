@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 13:15:47 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/19 15:01:34 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/19 15:06:28 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ void    ft_render(t_env *e)
 				{
 					if (object->intersect_func == ft_intersect_cone)
 					{
-						printf("cone dir \n");
-						ft_print_vec3(ray.direction);
 					}
 				}
 				intersect = object->intersect_func(ray, object);
@@ -110,10 +108,6 @@ void    ft_render(t_env *e)
 				}
 				if (i == e->sdl.screen.h / 2 && j == e->sdl.screen.w / 2)
 				{
-					printf("RAY ROT\n");
-					ft_print_vec3(ray_rot);
-					printf("RAY \n");
-					ft_print_vec3(ray_rot);
 					pix[e->sdl.screen.w * i + j] = 0x00ff00;
 				}
 				else
