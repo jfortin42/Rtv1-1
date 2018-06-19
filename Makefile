@@ -6,7 +6,7 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/06/19 13:22:47 by aherriau         ###   ########.fr        #
+#    Updated: 2018/06/19 16:38:58 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ SRCS_NO_PREFIX = main.c\
 				 ft_matrix.c\
 				 ft_events.c\
 				 ft_intersections.c\
+				 ft_normals.c\
 				 ft_objects.c
 
 INCLUDES_NO_PREFIX = rtv1.h

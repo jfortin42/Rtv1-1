@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 00:16:34 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/19 14:54:29 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/19 18:11:36 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,6 @@ t_mat4				ft_mat4_model_view_matrix_mat(t_mat4 translate,
 void				ft_print_mat4(t_mat4 mat);
 void				ft_print_vec3(t_vec3 vec);
 void				ft_print_ivec3(t_ivec3 vec);
+t_vec3				normalize(t_vec3 vec);
+float				ft_magnitude(t_vec3 vec);
 #endif

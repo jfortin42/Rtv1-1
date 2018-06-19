@@ -6,7 +6,7 @@
 # include "libmat.h"
 # include "objects.h"
 # include <fcntl.h>
-
+# define EPSILON 0.01
 typedef struct	s_object	t_object;
 
 typedef struct	s_keys
@@ -38,6 +38,8 @@ typedef struct		s_ray
 {
 	t_vec3			position;
 	t_vec3			direction;
+	int				x;
+	int				y;
 }					t_ray;
 
 typedef struct		 s_sdl
@@ -87,13 +89,18 @@ struct				s_object
 	t_mat4			transform_pos_inv;
 	t_mat4			transform_dir;
 	t_mat4			transform_dir_inv;
-	t_intersect		(*intersect_func)(t_ray, t_object *);
+	float			(*intersect_func)(t_ray, t_object *);
+	t_vec3			(*normal_func)(t_vec3, t_object *);
 };
 
 typedef struct		s_hit
 {
+	t_object		*object;
 	float			t;
+	t_vec3			point;
 	t_vec3			normal;
+	t_vec3			world_point;
+	t_vec3			world_normal;
 	int				color;
 }					t_hit;
 
@@ -141,9 +148,13 @@ t_object					*ft_new_cylinder(float radius, t_vec3 pos,
 								t_vec3 rot, int color);
 t_object					*ft_new_cone(float angle, t_vec3 pos,
 								t_vec3 rot, int color);
-t_intersect					ft_intersect_sphere(t_ray ray, t_object *object);
-t_intersect					ft_intersect_cone(t_ray ray, t_object *object);
-t_intersect					ft_intersect_cylinder(t_ray ray, t_object *object);
-t_intersect					ft_intersect_plane(t_ray ray, t_object *object);
+float						ft_intersect_sphere(t_ray ray, t_object *object);
+float						ft_intersect_cone(t_ray ray, t_object *object);
+float						ft_intersect_cylinder(t_ray ray, t_object *object);
+float						ft_intersect_plane(t_ray ray, t_object *object);
 float						ft_min_pos(float a, float b);
+t_vec3						ft_normal_sphere(t_vec3 point, t_object *obj);
+t_vec3						ft_normal_plane(t_vec3 point, t_object *obj);
+t_vec3						ft_normal_cylinder(t_vec3 point, t_object *obj);
+t_vec3						ft_normal_cone(t_vec3 point, t_object *obj);
 #endif

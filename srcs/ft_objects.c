@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/19 14:53:50 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/19 16:38:09 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_object    *ft_new_sphere(float radius, t_vec3 pos, t_vec3 rot, int color)
 	res->position = pos;
 	res->rotation = rot;
 	res->intersect_func = &ft_intersect_sphere;	
+	res->normal_func = &ft_normal_sphere;	
 	res->smoothness = 0;
 	res->shininess = 0;
 	return (res);
@@ -37,6 +38,7 @@ t_object    *ft_new_cone(float angle, t_vec3 pos, t_vec3 rot, int color)
 	res->position = pos;
 	res->rotation = rot;
 	res->intersect_func = &ft_intersect_cone;
+	res->normal_func = &ft_normal_cone;	
 	res->smoothness = 0;
 	res->shininess = 0;
 	return (res);
@@ -52,6 +54,7 @@ t_object    *ft_new_cylinder(float radius, t_vec3 pos, t_vec3 rot, int color)
 	res->position = pos;
 	res->rotation = rot;
 	res->intersect_func = &ft_intersect_cylinder;	
+	res->normal_func = &ft_normal_cylinder;	
 	res->smoothness = 0;
 	res->shininess = 0;
 	return (res);
@@ -66,6 +69,7 @@ t_object    *ft_new_plane(t_vec3 pos, t_vec3 rot, int color)
 	res->position = pos;
 	res->rotation = rot;
 	res->intersect_func = &ft_intersect_plane;
+	res->normal_func = &ft_normal_plane;	
 	res->smoothness = 0;
 	res->shininess = 0;
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 12:34:10 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/19 14:17:19 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/19 18:40:58 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ void    ft_init_scene(t_env *e)
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI * 0.1, ft_new_vec3(10.f, 0.f, 10.f),
 					ft_new_vec3(0.0f, 0, M_PI / 2), 0x0000ff), sizeof(t_object)));
 		//100, 10
+	//	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(10.0, ft_new_vec3(0.f, 10.f, 10.f),
+	//				ft_new_vec3(0.0f, 0.0, 0.0f), 0xFF0000), sizeof(t_object)));
 	}
-	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-10.f, -4.f, 6.f)), sizeof(t_spot)));
+	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-10.f, 0.f, 5.f)), sizeof(t_spot)));
+//	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(10.f, -4.f, 6.f)), sizeof(t_spot)));
 	e->selected_object = (t_object *)(e->objects->content);
 }
