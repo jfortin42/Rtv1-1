@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 13:15:47 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/19 15:06:28 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/19 15:42:23 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void    ft_render(t_env *e)
 	t_object	*object;
 	double px;
 	double py;
+	double image_ratio = (float)e->sdl.screen.w / (float)e->sdl.screen.h;
 	int *pix;
 	t_mat4 cam_rot;
 	t_list *ptr;
@@ -53,8 +54,8 @@ void    ft_render(t_env *e)
 		j = 0;
 		while (j < e->sdl.screen.w)
 		{
-			px = ((2 * ((j + 0.5) / e->sdl.screen.w)) - 1);
-			py = (1 - (2 * (i + 0.5) / e->sdl.screen.h));
+			px = (2 * ((j + 0.5) / e->sdl.screen.w) - 1) * tan(e->cam.fov / 2) * image_ratio;
+			py = (1 - 2 * (i + 0.5) / e->sdl.screen.h) * tan(e->cam.fov / 2);
 			t_vec3 lol = ft_new_vec3(px, py, 1);
 			ft_vec3_normalize(&lol);
 			ptr = e->objects;

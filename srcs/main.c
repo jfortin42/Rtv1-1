@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 20:33:57 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/19 12:48:45 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/19 19:13:20 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int		ft_error(int type)
 	if (type == 1)
 	{
 		ft_putstr("Invalid scene. ");
-		ft_putstr("Available scenes: 'scene1' 'scene2' 'scene3'\n");
+		ft_putstr("Available scenes: 'sphere' 'plane' 'cylinder' ");
+		ft_putstr("'cone' 'scene1' 'scene2'\n");
 	}
 	else if (type == 2)
 		ft_putstr("Invalid mode. Available mode: 'fast'\n");
@@ -25,24 +26,44 @@ int		ft_error(int type)
 	return (1);
 }
 
-int		ft_set_scene(t_env *e, char *scene)
+int		ft_set_scene_2(t_env *e, char *scene)
 {
 	if (ft_strcmp(scene, "scene1") == 0)
 	{
-		e->scene = 1;
+		e->scene = 5;
 		return (1);
 	}
 	if (ft_strcmp(scene, "scene2") == 0)
 	{
+		e->scene = 6;
+		return (1);
+	}
+	return (0);
+}
+
+int		ft_set_scene(t_env *e, char *scene)
+{
+	if (ft_strcmp(scene, "sphere") == 0)
+	{
+		e->scene = 1;
+		return (1);
+	}
+	if (ft_strcmp(scene, "plane") == 0)
+	{
 		e->scene = 2;
 		return (1);
 	}
-	if (ft_strcmp(scene, "scene3") == 0)
+	if (ft_strcmp(scene, "cylinder") == 0)
 	{
 		e->scene = 3;
 		return (1);
 	}
-	return (0);
+	if (ft_strcmp(scene, "cone") == 0)
+	{
+		e->scene = 4;
+		return (1);
+	}
+	return (ft_set_scene_2(e, scene));
 }
 
 int		ft_set_mode(t_env *e, char *scene)
