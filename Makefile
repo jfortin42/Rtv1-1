@@ -6,7 +6,7 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/04/17 00:28:07 by ldedier          ###   ########.fr        #
+#    Updated: 2018/06/19 12:42:14 by aherriau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ LIBSDL2DIR = SDL2-2.0.8
 LIBSDL2_INCLUDEDIR = include
 LIBSDL2_LIBDIR = build/.libs
 
-SRCS_NO_PREFIX = main.c ft_init.c ft_loop.c ft_events.c
+SRCS_NO_PREFIX = main.c ft_init.c ft_init_2.c ft_loop.c ft_events.c
 
 INCLUDES_NO_PREFIX = rtv1.h
 

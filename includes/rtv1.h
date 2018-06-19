@@ -49,12 +49,6 @@ typedef struct		 s_sdl
 	SDL_Renderer	*renderer;
 }					t_sdl;
 
-typedef struct		s_dim
-{
-	int				width;
-	int				height;
-}					t_dim;
-
 typedef struct		s_intersect
 {
 	int				color;
@@ -136,19 +130,19 @@ typedef struct              s_parser
 typedef struct		s_env 
 {
 	t_sdl			sdl;
-	t_dim			dim;
 	t_keys			keys;
 	t_camera		cam;
+	int				scene;
+	int				mode;
 	float			ambiant_coefficient;
 	float			speed;
-	int				mode;
 	t_list			*objects;
 	t_list			*spots;
 	t_object		*selected_object;
 }					t_env;
 
 int							ft_init_all(t_env *e);
-void						ft_loop(t_env *e);
+void						ft_init_scene(t_env *e);
 void						ft_loop(t_env *e);
 void						ft_keys_down(t_env *e, SDL_Event event);
 void						ft_keys_up(t_env *e, SDL_Event event);
