@@ -1,0 +1,2 @@
+rtv1
+objs/main.o objs/ft_init.o objs/ft_init_2.o objs/ft_loop.o objs/ft_process.o objs/ft_render.o objs/ft_utils.o objs/ft_matrix.o objs/ft_events.o objs/ft_intersections.o objs/ft_objects.o

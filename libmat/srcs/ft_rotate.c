@@ -12,7 +12,7 @@
 
 #include "libmat.h"
 
-t_mat4	ft_mat4_rotate_x(double alpha)
+t_mat4	ft_mat4_rotate_x(float alpha)
 {
 	t_mat4 mat;
 
@@ -35,7 +35,7 @@ t_mat4	ft_mat4_rotate_x(double alpha)
 	return (mat);
 }
 
-t_mat4	ft_mat4_rotate_y(double beta)
+t_mat4	ft_mat4_rotate_y(float beta)
 {
 	t_mat4 mat;
 
@@ -58,7 +58,7 @@ t_mat4	ft_mat4_rotate_y(double beta)
 	return (mat);
 }
 
-t_mat4	ft_mat4_rotate_z(double gamma)
+t_mat4	ft_mat4_rotate_z(float gamma)
 {
 	t_mat4 mat;
 
@@ -81,7 +81,7 @@ t_mat4	ft_mat4_rotate_z(double gamma)
 	return (mat);
 }
 
-t_mat4	ft_mat4_rotate(double alpha, double beta, double gamma)
+t_mat4	ft_mat4_rotate(float alpha, float beta, float gamma)
 {
 	t_mat4 mat_x;
 	t_mat4 mat_y;

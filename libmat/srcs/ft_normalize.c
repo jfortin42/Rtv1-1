@@ -12,15 +12,15 @@
 
 #include "libmat.h"
 
-double	ft_vec3_get_norm(t_vec3 vec)
+float	ft_vec3_get_norm(t_vec3 vec)
 {
 	return (sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z));
 }
 
 void	ft_vec3_normalize(t_vec3 *vec)
 {
-	double norm;
-	double invnorm;
+	float norm;
+	float invnorm;
 
 	norm = ft_vec3_get_norm(*vec);
 	if (norm != 0)

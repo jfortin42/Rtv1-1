@@ -49,12 +49,6 @@ typedef struct		 s_sdl
 	SDL_Renderer	*renderer;
 }					t_sdl;
 
-typedef struct		s_dim
-{
-	int				width;
-	int				height;
-}					t_dim;
-
 typedef struct		s_intersect
 {
 	int				color;
@@ -111,24 +105,33 @@ typedef struct		s_spot
 typedef struct		s_env 
 {
 	t_sdl			sdl;
-	t_dim			dim;
 	t_keys			keys;
 	t_camera		cam;
+	int				scene;
+	int				mode;
 	float			ambiant_coefficient;
 	float			speed;
-	int				mode;
 	t_list			*objects;
 	t_list			*spots;
 	t_object		*selected_object;
 }					t_env;
 
 int							ft_init_all(t_env *e);
+void						ft_init_scene(t_env *e);
 void						ft_loop(t_env *e);
-void						ft_loop(t_env *e);
+void						ft_process(t_env *e);
+void						ft_render(t_env *e);
+void						ft_compute_matrix(t_object *object);
+void						ft_compute_matrices_list(t_list *objects);
+int							ft_intersect_objects(t_list *objects, t_ray ray, t_object *except);
+int							ft_color_add(int color, float to_add);
+int							ft_get_color_reduction(int color, float reduc);
+
+
+
 void						ft_keys_down(t_env *e, SDL_Event event);
 void						ft_keys_up(t_env *e, SDL_Event event);
 void						ft_mouse_motion(t_env *e, SDL_Event event);
-void						ft_loop(t_env *e);
 
 t_object					*ft_new_sphere(float radius, t_vec3 pos,
 								t_vec3 rot, int color);

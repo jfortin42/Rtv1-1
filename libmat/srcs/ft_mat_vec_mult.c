@@ -12,7 +12,7 @@
 
 #include "libmat.h"
 
-void		ft_load_vec(t_vec3 vec, double vec_as_arr[4])
+void		ft_load_vec(t_vec3 vec, float vec_as_arr[4])
 {
 	vec_as_arr[0] = vec.x;
 	vec_as_arr[1] = vec.y;
@@ -20,7 +20,7 @@ void		ft_load_vec(t_vec3 vec, double vec_as_arr[4])
 	vec_as_arr[3] = 1.0;
 }
 
-void		ft_init_vec(double vec_as_arr[3])
+void		ft_init_vec(float vec_as_arr[3])
 {
 	vec_as_arr[0] = 0;
 	vec_as_arr[1] = 0;
@@ -29,8 +29,8 @@ void		ft_init_vec(double vec_as_arr[3])
 
 t_vec3	ft_vec3_mat4_mult(t_vec3 vec, t_mat4 mat)
 {
-	double	vec_as_arr[4];
-	double	res[3];
+	float	vec_as_arr[4];
+	float	res[3];
 	int		i;
 	int		j;
 	int		k;
