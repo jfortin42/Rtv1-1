@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 13:15:47 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/19 18:58:00 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/19 19:54:25 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,16 @@ void    ft_render(t_env *e)
 				while (ptr != NULL)
 				{
 					spot = (t_spot *)(ptr->content);
-					light_ray.position = spot->position;
-					light_ray.direction = ft_vec3_cmp(hit.world_point, light_ray.position);
+					ft_vec3_normalize(&(hit.world_normal));
+					light_ray.position = ft_vec3_add(hit.world_point, ft_vec3_scalar(ray.direction, -0.001));
+					light_ray.direction = ft_vec3_cmp(spot->position, light_ray.position);
 					float light_inter_dist = ft_magnitude(light_ray.direction);
 					ft_vec3_normalize(&(light_ray.direction));
-					ft_vec3_normalize(&(hit.world_normal));
 					hit2 = ft_trace(light_ray, e);
-					if (hit2.t >= light_inter_dist - 0.01)
+					if (hit2.t >= light_inter_dist - 0.008)
 					{
+						light_ray.direction = ft_vec3_cmp(hit.world_point, spot->position);
+						ft_vec3_normalize(&(light_ray.direction));
 						diffuse_factor += ft_fmax(0, ft_dot_product(ft_vec3_scalar(light_ray.direction, -1), hit.world_normal));
 						rm = ft_vec3_cmp(ft_vec3_scalar(hit.world_normal, 2 * (ft_dot_product(light_ray.direction, hit.world_normal))), light_ray.direction);
 						v = ft_vec3_cmp(hit.world_point, e->cam.position);
@@ -135,7 +137,7 @@ void    ft_render(t_env *e)
 	if (!(e->sdl.texture = SDL_CreateTextureFromSurface(e->sdl.renderer,
 					e->sdl.surface)))
 		exit(1);
-//	SDL_FillRect(e->sdl.surface, NULL, 0x000000);
+	SDL_FillRect(e->sdl.surface, NULL, 0x000000);
 	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &(e->sdl.screen));
 	SDL_DestroyTexture(e->sdl.texture);
 	SDL_RenderPresent(e->sdl.renderer);
