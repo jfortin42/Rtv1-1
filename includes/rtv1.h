@@ -155,4 +155,17 @@ void						ft_keys_up(t_env *e, SDL_Event event);
 void						ft_mouse_motion(t_env *e, SDL_Event event);
 void						ft_loop(t_env *e);
 
+t_object					*ft_new_sphere(float radius, t_vec3 pos,
+								t_vec3 rot, int color);
+t_object					*ft_new_plane(t_vec3 pos,
+								t_vec3 rot, int color);
+t_object					*ft_new_cylinder(float radius, t_vec3 pos,
+								t_vec3 rot, int color);
+t_object					*ft_new_cone(float angle, t_vec3 pos,
+								t_vec3 rot, int color);
+t_intersect					ft_intersect_sphere(t_ray ray, t_object *object);
+t_intersect					ft_intersect_cone(t_ray ray, t_object *object);
+t_intersect					ft_intersect_cylinder(t_ray ray, t_object *object);
+t_intersect					ft_intersect_plane(t_ray ray, t_object *object);
+float						ft_min_pos(float a, float b);
 #endif
