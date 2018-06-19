@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/08 19:35:43 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/19 11:25:53 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	ft_get_dimensions(t_env *e)
 	SDL_GetCurrentDisplayMode(0, &dm);
 	e->dim.width = dm.w;
 	e->dim.height = dm.h;
+	e->dim.width = 150;
+	e->dim.height = 150;
 }
 
 int			ft_init_sdl(t_env *e)
@@ -31,7 +33,8 @@ int			ft_init_sdl(t_env *e)
 	e->sdl.screen.w = e->dim.width;
 	e->sdl.screen.h = e->dim.height;
 	if (!(e->sdl.window = SDL_CreateWindow("rtv1",
-		e->sdl.screen.x, e->sdl.screen.y, e->sdl.screen.w, e->sdl.screen.h, SDL_WINDOW_FULLSCREEN_DESKTOP)))
+	//	e->sdl.screen.x, e->sdl.screen.y, e->sdl.screen.w, e->sdl.screen.h, SDL_WINDOW_FULLSCREEN_DESKTOP)))
+		e->sdl.screen.x, e->sdl.screen.y, e->sdl.screen.w, e->sdl.screen.h, 0)))
 		return (0);
 	e->sdl.renderer = SDL_CreateRenderer(e->sdl.window, -1, 0);
 	if (!(e->sdl.surface = SDL_CreateRGBSurface(0, e->dim.width, e->dim.height, 32, 0, 0, 0, 0)))

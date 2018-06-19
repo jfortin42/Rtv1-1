@@ -55,20 +55,6 @@ typedef struct		s_dim
 	int				height;
 }					t_dim;
 
-typedef struct 		s_test
-{
-	t_sphere		sphere;
-	t_camera		camera;
-	t_mat4			transform_pos;
-	t_mat4			transform_pos_inv;
-	t_mat4			transform_dir;
-	t_mat4			transform_dir_inv;
-	float			left;
-	float			right;
-	float			top;
-	float			bottom;
-}					t_test;
-
 typedef struct		s_intersect
 {
 	int				color;
@@ -93,14 +79,16 @@ typedef union		u_object_union
 	t_cylinder		cylinder;
 }					t_object_union;
 
+
 struct				s_object
 {
-	t_object_enum	object_enum;
 	t_object_union	object_union;
 	t_vec3			scale;
 	t_vec3			rotation;
 	t_vec3			position;
 	int				color;
+	float			shininess;
+	float			smoothness;
 	t_mat4			transform_pos;
 	t_mat4			transform_pos_inv;
 	t_mat4			transform_dir;
@@ -113,12 +101,43 @@ typedef struct		s_spot
 	t_vec3			position;
 }					t_spot;
 
+typedef enum                e_parse_enum
+{
+	e_parse_camera,
+	e_parse_object,
+	e_parse_cobject,
+	e_parse_light,
+	e_parse_ambient,
+	e_parse_fog,
+	e_parse_cut,
+	e_parse_mod,
+	e_parse_scene
+}                           t_parse_enum;
+
+typedef struct              s_tag
+{
+	char					*tag;
+	int						has_attribute;
+}                           t_tag;
+
+typedef struct              s_parser
+{
+	t_list					*tag_stack;
+	t_list					*attribute_stack;
+	char					*tag;
+	char					*attribute;
+	t_parse_enum			parse_enum;
+	int						nb_lines;
+	int						op;
+	int						got_scene;
+	int						got_attribute;
+}                           t_parser;
+
 typedef struct		s_env 
 {
 	t_sdl			sdl;
 	t_dim			dim;
 	t_keys			keys;
-	t_test			test;
 	t_camera		cam;
 	float			ambiant_coefficient;
 	float			speed;
@@ -128,11 +147,12 @@ typedef struct		s_env
 	t_object		*selected_object;
 }					t_env;
 
-int					ft_init_all(t_env *e);
-void				ft_loop(t_env *e);
-void				ft_loop(t_env *e);
-void				ft_keys_down(t_env *e, SDL_Event event);
-void				ft_keys_up(t_env *e, SDL_Event event);
-void				ft_mouse_motion(t_env *e, SDL_Event event);
-void				ft_loop(t_env *e);
+int							ft_init_all(t_env *e);
+void						ft_loop(t_env *e);
+void						ft_loop(t_env *e);
+void						ft_keys_down(t_env *e, SDL_Event event);
+void						ft_keys_up(t_env *e, SDL_Event event);
+void						ft_mouse_motion(t_env *e, SDL_Event event);
+void						ft_loop(t_env *e);
+
 #endif
