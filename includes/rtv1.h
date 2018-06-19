@@ -96,42 +96,17 @@ struct				s_object
 	t_intersect		(*intersect_func)(t_ray, t_object *);
 };
 
+typedef struct		s_hit
+{
+	float			t;
+	t_vec3			normal;
+	int				color;
+}					t_hit;
+
 typedef struct		s_spot
 {
 	t_vec3			position;
 }					t_spot;
-
-typedef enum                e_parse_enum
-{
-	e_parse_camera,
-	e_parse_object,
-	e_parse_cobject,
-	e_parse_light,
-	e_parse_ambient,
-	e_parse_fog,
-	e_parse_cut,
-	e_parse_mod,
-	e_parse_scene
-}                           t_parse_enum;
-
-typedef struct              s_tag
-{
-	char					*tag;
-	int						has_attribute;
-}                           t_tag;
-
-typedef struct              s_parser
-{
-	t_list					*tag_stack;
-	t_list					*attribute_stack;
-	char					*tag;
-	char					*attribute;
-	t_parse_enum			parse_enum;
-	int						nb_lines;
-	int						op;
-	int						got_scene;
-	int						got_attribute;
-}                           t_parser;
 
 typedef struct		s_env 
 {

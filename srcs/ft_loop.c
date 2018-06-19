@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 22:19:07 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/19 12:42:56 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/19 14:17:22 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,13 +276,13 @@ void    ft_init_scene(t_env *e)
 //					ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(2.f, 1.f, 1.f), 0xff0000, 100, 2), sizeof(t_object)));
 	
 	}
-	//	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(0.5f, ft_new_vec3(-15.f, 8.f, 5.f),
-	//				ft_new_vec3(0.0f, 0.0, 0.0f), ft_new_vec3(1.f, 1.f, 1.f), 0xff0000), sizeof(t_object)));
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(10.5f, ft_new_vec3(-15.f, 8.f, 5.f),
+					ft_new_vec3(0.0f, 0.0, 0.0f), 0xff0000), sizeof(t_object)));
 
 //	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-30.f, 6.f, 5.f)), sizeof(t_spot)));
 	
 //	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-21.f, 0.f, -8.f)), sizeof(t_spot)));
-//	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-10.f, -4.f, 6.f)), sizeof(t_spot)));
+//	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(10.f, -4.f, 6.f)), sizeof(t_spot)));
 	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-10.f, -4.f, 6.f)), sizeof(t_spot)));
 
 //	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(0.f, 0.f, -10.f)), sizeof(t_spot)));
@@ -317,6 +317,7 @@ int		ft_intersect_objects(t_list *objects, t_ray ray, t_object *except)
 	}
 	return (0);
 }
+
 
 void    ft_render(t_env *e)
 {
@@ -408,7 +409,6 @@ void    ft_render(t_env *e)
 						
 						rm = ft_vec3_cmp(ft_vec3_scalar(n, 2 *  (ft_dot_product(light_ray.direction, n))), light_ray.direction);
 						v = ft_vec3_cmp(c, e->cam.position);
-						
 						ft_vec3_normalize(&v);
 						ft_vec3_normalize(&rm);
 						specular_factor += pow(ft_fmax(0, ft_dot_product(v, rm)), intersected_object->smoothness);
@@ -424,7 +424,7 @@ void    ft_render(t_env *e)
 					pix[e->sdl.screen.w * i + j] = 0x00ff00;
 				}
 				else
-					pix[e->sdl.screen.w * i + j] = ft_color_add(ft_get_color_reduction(intersected_object->color, 0.2 + 0.8 * ft_fclamp(0, diffuse_factor, 1)), intersected_object->shininess * specular_factor);
+					pix[e->sdl.screen.w * i + j] = ft_color_add(ft_get_color_reduction(intersected_object->color, e->ambiant_coefficient + (1 - e->ambiant_coefficient) * ft_fclamp(0, diffuse_factor, 1)), intersected_object->shininess * specular_factor);
 			}
 			j += step;
 		}

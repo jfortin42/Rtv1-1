@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/04/07 21:09:38 by ldedier          ###   ########.fr        #
+#    Updated: 2018/06/19 13:18:37 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,10 +26,9 @@ INCLUDESDIR = includes
 OK_COLOR = \x1b[32;01m
 EOC = \033[0m
 
-SRCS_NO_PREFIX = ft_vec.c ft_mat_mult.c ft_translate.c ft_scale.c ft_tools.c\
-				 ft_rotate.c ft_eye.c ft_transpose.c ft_normalize.c\
-				 ft_vec_op.c ft_look_at.c ft_perspective.c ft_mat_vec_mult.c\
-				 ft_model_view_matrix.c
+SRCS_NO_PREFIX = ft_vec.c ft_mat_mult.c ft_translate.c ft_scale.c\
+				 ft_rotate.c ft_normalize.c ft_vec_op.c ft_mat_vec_mult.c\
+				 ft_model_view_matrix.c ft_tools.c ft_transpose.c
 
 
 SOURCES = $(addprefix $(SRCDIR)/, $(SRCS_NO_PREFIX))
@@ -44,6 +43,7 @@ CFLAGS += $(INC_PATH)
 all: $(BINDIR)/$(NAME)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c $(INCLUDES)
+	@mkdir -p $(OBJDIR)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(BINDIR)/$(NAME): $(OBJECTS)
