@@ -6,7 +6,7 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/06/19 12:35:56 by ldedier          ###   ########.fr        #
+#    Updated: 2018/06/19 13:22:47 by aherriau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,12 @@ LIBSDL2_LIBDIR = build/.libs
 
 SRCS_NO_PREFIX = main.c\
 				 ft_init.c\
+				 ft_init_2.c\
 				 ft_loop.c\
+				 ft_process.c\
+				 ft_render.c\
+				 ft_utils.c\
+				 ft_matrix.c\
 				 ft_events.c\
 				 ft_intersections.c\
 				 ft_objects.c
@@ -90,6 +95,7 @@ $(BINDIR)/$(NAME): $(OBJECTS) $(LIBSDL2)
 	@echo $(OBJECTS) >> .gitignore
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c $(INCLUDES)
+	@mkdir -p $(OBJDIR)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:
