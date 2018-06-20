@@ -6,7 +6,7 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/06/20 21:46:17 by aherriau         ###   ########.fr        #
+#    Updated: 2018/06/20 22:25:36 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRCS_NO_PREFIX = main.c\
 				 ft_events.c\
 				 ft_events_2.c\
 				 ft_intersections.c\
+				 ft_trace.c\
 				 ft_normals.c\
 				 ft_objects.c
 

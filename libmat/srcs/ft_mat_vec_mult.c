@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/07 17:10:52 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/12 11:05:39 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/20 22:30:09 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		ft_init_vec(float vec_as_arr[3])
 	vec_as_arr[2] = 0;
 }
 
-t_vec3	ft_vec3_mat4_mult(t_vec3 vec, t_mat4 mat)
+t_vec3		ft_vec3_mat4_mult(t_vec3 vec, t_mat4 mat)
 {
 	float	vec_as_arr[4];
 	float	res[3];

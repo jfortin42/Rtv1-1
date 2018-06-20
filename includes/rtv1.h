@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 22:02:04 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/20 22:10:02 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/20 22:27:50 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ typedef struct		s_ray
 	int				x;
 	int				y;
 }					t_ray;
+
+typedef struct		s_phong
+{
+	float			diffuse_factor;
+	float			specular_factor;
+}					t_phong;
 
 typedef struct		s_sdl
 {
@@ -122,6 +128,12 @@ typedef struct		s_spot
 	t_vec3			position;
 }					t_spot;
 
+typedef struct		s_auxcone
+{
+	float			cangle;
+	float			sangle;
+}					t_auxcone;
+
 typedef struct		s_env
 {
 	t_sdl			sdl;
@@ -177,4 +189,5 @@ void				ft_scene_3(t_env *e);
 void				ft_scene_4(t_env *e);
 void				ft_scene_5(t_env *e);
 void				ft_scene_6(t_env *e);
+t_hit				ft_trace(t_ray ray, t_env *e);
 #endif
