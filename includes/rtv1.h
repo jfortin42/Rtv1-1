@@ -42,6 +42,12 @@ typedef struct		s_ray
 	int				y;
 }					t_ray;
 
+typedef struct		s_phong
+{
+	float			diffuse_factor;
+	float			specular_factor;
+}					t_phong;
+
 typedef struct		 s_sdl
 {
 	SDL_Surface		*surface;
@@ -109,6 +115,12 @@ typedef struct		s_spot
 	t_vec3			position;
 }					t_spot;
 
+typedef struct		s_auxcone
+{
+	float			cangle;
+	float			sangle;
+}					t_auxcone;
+
 typedef struct		s_env 
 {
 	t_sdl			sdl;
@@ -157,4 +169,5 @@ t_vec3						ft_normal_sphere(t_vec3 point, t_object *obj);
 t_vec3						ft_normal_plane(t_vec3 point, t_object *obj);
 t_vec3						ft_normal_cylinder(t_vec3 point, t_object *obj);
 t_vec3						ft_normal_cone(t_vec3 point, t_object *obj);
+t_hit						ft_trace(t_ray ray, t_env *e);
 #endif
