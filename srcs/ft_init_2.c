@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 12:34:10 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/19 19:25:18 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/20 19:42:37 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void    ft_init_scene(t_env *e)
 		obj = (t_object *)(e->objects->content);
 		obj->smoothness = 80;
 		obj->shininess = 10;
-		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(15.f, 2.f, -10.f)), sizeof(t_spot)));
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(7.f, 2.f, -10.f)), sizeof(t_spot)));
 	}
 	else if (e->scene == 2)
 	{
@@ -77,13 +77,15 @@ void    ft_init_scene(t_env *e)
 	}
 	else if (e->scene == 3)
 	{
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(5.0, ft_new_vec3(0.f, 0.f, 0.f),
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(5.0, ft_new_vec3(0.f, 0.f, 10.f),
 					ft_new_vec3(0.0f, 0.0f, M_PI / 2), 0x00ff00), sizeof(t_object)));
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(10.f, 0.f, 0.f)), sizeof(t_spot)));
 	}
 	else if (e->scene == 4)
 	{
-		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI * 0.1, ft_new_vec3(0.f, 0.f, 0.f),
-					ft_new_vec3(0.0f, 0.0f, 0.0f), 0xffff00), sizeof(t_object)));
+		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI * 0.2, ft_new_vec3(0.f, 0.f, 0.f),
+					ft_new_vec3(0.0f, 0.0f, M_PI / 2), 0xffff00), sizeof(t_object)));
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(10.f, 0.f, -10.f)), sizeof(t_spot)));
 	}
 	else if (e->scene == 5)
 	{
@@ -100,7 +102,7 @@ void    ft_init_scene(t_env *e)
 					ft_new_vec3(0.0f, 0.0f, M_PI / 4), 0x00ff00), sizeof(t_object)));
 		ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cone(M_PI * 0.22, ft_new_vec3(7.f, -5.f, 20.f),
 					ft_new_vec3(0.0f, 0.0f, -M_PI / 3), 0xffff00), sizeof(t_object)));
-		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(30.f, 0.f, 0.f)), sizeof(t_spot)));
+		ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(10.f, 0.f, 0.f)), sizeof(t_spot)));
 	}
 	else if (e->scene == 6)
 	{
