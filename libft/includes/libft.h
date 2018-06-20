@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 18:21:30 by ldedier           #+#    #+#             */
-/*   Updated: 2018/04/03 23:44:58 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/20 20:36:08 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int					ft_isseparator_light(int c);
 void				ft_lstpushback(t_list **alst, t_list *newelem);
 void				*ft_lstpop(t_list **lst);
 int					ft_lstlength(t_list *list);
+t_list				*ft_lst_at(t_list *begin_list, unsigned int nbr);
 void				ft_sort_tab(int *tab, size_t size);
 t_tree				*ft_newtree(void *content);
 void				ft_infix(t_tree *tree, void (*f)(t_tree *));

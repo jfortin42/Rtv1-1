@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rtv1.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/06/20 22:02:04 by aherriau          #+#    #+#             */
+/*   Updated: 2018/06/20 22:10:02 by aherriau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_RTV1_H
 # define FT_RTV1_H
 
@@ -6,33 +18,35 @@
 # include "libmat.h"
 # include "objects.h"
 # include <fcntl.h>
-# define EPSILON 0.01
-typedef struct	s_object	t_object;
 
-typedef struct	s_keys
+# define EPSILON 0.01
+
+typedef struct s_object	t_object;
+
+typedef struct		s_keys
 {
-	int			up;
-	int			down;
-	int			left;
-	int			right;
-	int			key_o;
-	int			key_p;
-	int			key_7;
-	int			key_8;
-	int			key_5;
-	int			key_4;
-	int			key_2;
-	int			key_1;
-	int			key_w;
-	int			key_a;
-	int			key_s;
-	int			key_d;
-	int			key_e;
-	int			key_q;
-	int			key_ctrl;
-	int			key_space;
-	int			key_shift;
-}				t_keys;
+	int				up;
+	int				down;
+	int				left;
+	int				right;
+	int				key_o;
+	int				key_p;
+	int				key_7;
+	int				key_8;
+	int				key_5;
+	int				key_4;
+	int				key_2;
+	int				key_1;
+	int				key_w;
+	int				key_a;
+	int				key_s;
+	int				key_d;
+	int				key_e;
+	int				key_q;
+	int				key_ctrl;
+	int				key_space;
+	int				key_shift;
+}					t_keys;
 
 typedef struct		s_ray
 {
@@ -42,7 +56,7 @@ typedef struct		s_ray
 	int				y;
 }					t_ray;
 
-typedef struct		 s_sdl
+typedef struct		s_sdl
 {
 	SDL_Surface		*surface;
 	SDL_Texture		*texture;
@@ -59,13 +73,13 @@ typedef struct		s_intersect
 	float			t;
 }					t_intersect;
 
-typedef enum	e_object_enum
+typedef enum		e_object_enum
 {
 	e_sphere,
 	e_cone,
 	e_plane,
 	e_cylinder
-}				t_object_enum;
+}					t_object_enum;
 
 typedef union		u_object_union
 {
@@ -74,7 +88,6 @@ typedef union		u_object_union
 	t_plane			plane;
 	t_cylinder		cylinder;
 }					t_object_union;
-
 
 struct				s_object
 {
@@ -109,7 +122,7 @@ typedef struct		s_spot
 	t_vec3			position;
 }					t_spot;
 
-typedef struct		s_env 
+typedef struct		s_env
 {
 	t_sdl			sdl;
 	t_keys			keys;
@@ -118,43 +131,50 @@ typedef struct		s_env
 	int				mode;
 	float			ambiant_coefficient;
 	float			speed;
+	int				nb_objects;
+	int				current_object;
+	int				can_change;
 	t_list			*objects;
 	t_list			*spots;
 	t_object		*selected_object;
 }					t_env;
 
-int							ft_init_all(t_env *e);
-void						ft_init_scene(t_env *e);
-void						ft_loop(t_env *e);
-void						ft_process(t_env *e);
-void						ft_render(t_env *e);
-void						ft_compute_matrix(t_object *object);
-void						ft_compute_matrices_list(t_list *objects);
-int							ft_intersect_objects(t_list *objects, t_ray ray, t_object *except);
-int							ft_color_add(int color, float to_add);
-int							ft_get_color_reduction(int color, float reduc);
+int					ft_init_all(t_env *e);
+void				ft_init_scene(t_env *e);
+void				ft_loop(t_env *e);
+void				ft_process(t_env *e);
+void				ft_render(t_env *e);
+void				ft_compute_matrix(t_object *object);
+void				ft_compute_matrices_list(t_list *objects);
+int					ft_color_add(int color, float to_add);
+int					ft_get_color_reduction(int color, float reduc);
 
+void				ft_keys_down(t_env *e, SDL_Event event);
+void				ft_keys_up(t_env *e, SDL_Event event);
+void				ft_mouse_motion(t_env *e, SDL_Event event);
 
+t_object			*ft_new_sphere(float radius, t_vec3 pos,
+						t_vec3 rot, int color);
+t_object			*ft_new_plane(t_vec3 pos,
+						t_vec3 rot, int color);
+t_object			*ft_new_cylinder(float radius, t_vec3 pos,
+						t_vec3 rot, int color);
+t_object			*ft_new_cone(float angle, t_vec3 pos,
+						t_vec3 rot, int color);
 
-void						ft_keys_down(t_env *e, SDL_Event event);
-void						ft_keys_up(t_env *e, SDL_Event event);
-void						ft_mouse_motion(t_env *e, SDL_Event event);
+float				ft_intersect_sphere(t_ray ray, t_object *object);
+float				ft_intersect_cone(t_ray ray, t_object *object);
+float				ft_intersect_cylinder(t_ray ray, t_object *object);
+float				ft_intersect_plane(t_ray ray, t_object *object);
+float				ft_min_pos(float a, float b);
+t_vec3				ft_normal_sphere(t_vec3 point, t_object *obj);
+t_vec3				ft_normal_plane(t_vec3 point, t_object *obj);
+t_vec3				ft_normal_cylinder(t_vec3 point, t_object *obj);
+t_vec3				ft_normal_cone(t_vec3 point, t_object *obj);
 
-t_object					*ft_new_sphere(float radius, t_vec3 pos,
-								t_vec3 rot, int color);
-t_object					*ft_new_plane(t_vec3 pos,
-								t_vec3 rot, int color);
-t_object					*ft_new_cylinder(float radius, t_vec3 pos,
-								t_vec3 rot, int color);
-t_object					*ft_new_cone(float angle, t_vec3 pos,
-								t_vec3 rot, int color);
-float						ft_intersect_sphere(t_ray ray, t_object *object);
-float						ft_intersect_cone(t_ray ray, t_object *object);
-float						ft_intersect_cylinder(t_ray ray, t_object *object);
-float						ft_intersect_plane(t_ray ray, t_object *object);
-float						ft_min_pos(float a, float b);
-t_vec3						ft_normal_sphere(t_vec3 point, t_object *obj);
-t_vec3						ft_normal_plane(t_vec3 point, t_object *obj);
-t_vec3						ft_normal_cylinder(t_vec3 point, t_object *obj);
-t_vec3						ft_normal_cone(t_vec3 point, t_object *obj);
+t_spot				*ft_new_spot(t_vec3 position);
+void				ft_scene_3(t_env *e);
+void				ft_scene_4(t_env *e);
+void				ft_scene_5(t_env *e);
+void				ft_scene_6(t_env *e);
 #endif
