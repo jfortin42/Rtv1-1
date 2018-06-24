@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 21:30:03 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/20 21:34:20 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/23 12:10:41 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,16 @@ void	ft_scene_6_4(t_env *e)
 	obj = (t_object *)(e->objects->content);
 	obj->smoothness = 100;
 	obj->shininess = 10;
-	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(1.f, ft_new_vec3(0.f,
-		-8.f, 12.f), ft_new_vec3(0.f, 0.f, 0.f), 0xff0000), sizeof(t_object)));
-	obj = (t_object *)(e->objects->content);
-	obj->smoothness = 100;
-	obj->shininess = 10;
 	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(-20.f, -2.f,
 		-10.f)), sizeof(t_spot)));
 	ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(ft_new_vec3(20.f, -2.f,
 		-10.f)), sizeof(t_spot)));
+	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0,
+		ft_new_vec3(10.f, 0.f, 10.f), ft_new_vec3(0.0f, 0.0f, M_PI / 2),
+		0x777777), sizeof(t_object)));
+	obj = (t_object *)(e->objects->content);
+	obj->smoothness = 100;
+	obj->shininess = 10;
 }
 
 void	ft_scene_6_3(t_env *e)
@@ -46,14 +47,13 @@ void	ft_scene_6_3(t_env *e)
 	obj = (t_object *)(e->objects->content);
 	obj->smoothness = 100;
 	obj->shininess = 10;
-	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_cylinder(2.0,
-		ft_new_vec3(10.f, 0.f, 10.f), ft_new_vec3(0.0f, 0.0f, M_PI / 2),
-		0x777777), sizeof(t_object)));
+	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f,
+		10.f, 10.f), ft_new_vec3(0.f, 0.f, 0.f), 0x777777), sizeof(t_object)));
 	obj = (t_object *)(e->objects->content);
 	obj->smoothness = 100;
 	obj->shininess = 10;
-	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(4.0, ft_new_vec3(10.f,
-		10.f, 10.f), ft_new_vec3(0.f, 0.f, 0.f), 0x777777), sizeof(t_object)));
+	ft_lstadd(&(e->objects), ft_lstnew_ptr(ft_new_sphere(1.f, ft_new_vec3(0.f,
+		-8.f, 12.f), ft_new_vec3(0.f, 0.f, 0.f), 0xff0000), sizeof(t_object)));
 	obj = (t_object *)(e->objects->content);
 	obj->smoothness = 100;
 	obj->shininess = 10;

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/19 12:45:10 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/22 20:57:53 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,6 @@ int		ft_init_sdl(t_env *e)
 				e->sdl.screen.h) < 0)
 		return (0);
 	if (SDL_SetRenderDrawColor(e->sdl.renderer, 0, 0, 0, 255) < 0)
-		return (0);
-	e->sdl.surface = SDL_CreateRGBSurface(0, e->sdl.screen.w, e->sdl.screen.h,
-			32, 0, 0, 0, 0);
-	if (e->sdl.surface == NULL)
 		return (0);
 	if (e->mode == 1)
 		SDL_SetRelativeMouseMode(SDL_TRUE);

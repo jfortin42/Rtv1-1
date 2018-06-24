@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 21:04:27 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/20 21:35:04 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/23 12:14:38 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	ft_process_hit(t_hit *hit, t_ray ray, float t, t_object *object)
 			ray.position);
 	hit->normal = object->normal_func(hit->point,
 			object);
+	if (ft_dot_product(ray.direction, hit->normal) > 0)
+		hit->normal = ft_vec3_scalar(hit->normal, -1);
 	hit->world_point = ft_vec3_mat4_mult(hit->point,
 			object->transform_pos);
 	hit->world_normal = normalize(ft_vec3_mat4_mult(hit->normal,

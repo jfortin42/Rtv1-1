@@ -6,16 +6,26 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 13:16:12 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/20 21:59:51 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/23 12:02:31 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
+void	ft_process_4(t_env *e)
+{
+	if (e->keys.key_4)
+		e->selected_object->rotation.x += M_PI / 16;
+	if (e->keys.key_5)
+		e->selected_object->rotation.x -= M_PI / 16;
+	if (e->keys.key_7)
+		e->selected_object->rotation.y += M_PI / 16;
+	if (e->keys.key_8)
+		e->selected_object->rotation.y -= M_PI / 16;
+}
+
 void	ft_process_3(t_env *e)
 {
-	if (e->keys.key_5)
-		e->cam.rotation.x -= M_PI / 16;
 	if (e->keys.key_e)
 		e->selected_object->rotation.z += M_PI / 16;
 	if (e->keys.key_q)
@@ -38,6 +48,7 @@ void	ft_process_3(t_env *e)
 		e->selected_object = (t_object *)(ft_lst_at(e->objects,
 					e->current_object)->content);
 	}
+	ft_process_4(e);
 }
 
 void	ft_process_2(t_env *e)
@@ -63,8 +74,6 @@ void	ft_process_2(t_env *e)
 		e->selected_object->position.z += e->speed;
 	if (e->keys.key_2)
 		e->selected_object->position.z -= e->speed;
-	if (e->keys.key_4)
-		e->cam.rotation.x += M_PI / 16;
 	ft_process_3(e);
 }
 
