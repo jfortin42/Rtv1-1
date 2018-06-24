@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd.c                                        :+:      :+:    :+:   */
+/*   ft_tools.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/06 18:39:50 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 20:34:56 by ldedier          ###   ########.fr       */
+/*   Created: 2018/06/24 22:34:20 by ldedier           #+#    #+#             */
+/*   Updated: 2018/06/24 22:35:58 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "rtv1.h"
 
-int		ft_lstadd(t_list **alst, t_list *new)
+float	ft_deg_to_rad(int deg)
 {
-	if (new == NULL)
-		return (1);
-	new->next = *alst;
-	*alst = new;
-	return (0);
+	return (M_PI * deg / 180.0);
 }

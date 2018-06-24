@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 13:16:12 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/23 12:02:31 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/24 23:35:21 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 void	ft_process_4(t_env *e)
 {
-	if (e->keys.key_4)
+	if (e->keys.key_4 && e->nb_objects)
 		e->selected_object->rotation.x += M_PI / 16;
-	if (e->keys.key_5)
+	if (e->keys.key_5 && e->nb_objects)
 		e->selected_object->rotation.x -= M_PI / 16;
-	if (e->keys.key_7)
+	if (e->keys.key_7 && e->nb_objects)
 		e->selected_object->rotation.y += M_PI / 16;
-	if (e->keys.key_8)
+	if (e->keys.key_8 && e->nb_objects)
 		e->selected_object->rotation.y -= M_PI / 16;
 }
 
 void	ft_process_3(t_env *e)
 {
-	if (e->keys.key_e)
+	if (e->keys.key_e && e->nb_objects)
 		e->selected_object->rotation.z += M_PI / 16;
-	if (e->keys.key_q)
+	if (e->keys.key_q && e->nb_objects)
 		e->selected_object->rotation.z -= M_PI / 16;
-	if (e->keys.key_o && e->can_change)
+	if (e->keys.key_o && e->can_change&& e->nb_objects)
 	{
 		e->can_change = 0;
 		e->current_object -= 1;
@@ -39,7 +39,7 @@ void	ft_process_3(t_env *e)
 		e->selected_object = (t_object *)(ft_lst_at(e->objects,
 					e->current_object)->content);
 	}
-	if (e->keys.key_p && e->can_change)
+	if (e->keys.key_p && e->can_change&& e->nb_objects)
 	{
 		e->can_change = 0;
 		e->current_object += 1;
@@ -62,17 +62,17 @@ void	ft_process_2(t_env *e)
 		e->cam.position.y -= e->speed;
 	if (e->keys.key_space)
 		e->cam.position.y += e->speed;
-	if (e->keys.up)
+	if (e->keys.up && e->nb_objects)
 		e->selected_object->position.y += e->speed;
-	if (e->keys.down)
+	if (e->keys.down && e->nb_objects)
 		e->selected_object->position.y -= e->speed;
-	if (e->keys.right)
+	if (e->keys.right && e->nb_objects)
 		e->selected_object->position.x += e->speed;
-	if (e->keys.left)
+	if (e->keys.left && e->nb_objects)
 		e->selected_object->position.x -= e->speed;
-	if (e->keys.key_1)
+	if (e->keys.key_1 && e->nb_objects)
 		e->selected_object->position.z += e->speed;
-	if (e->keys.key_2)
+	if (e->keys.key_2 && e->nb_objects)
 		e->selected_object->position.z -= e->speed;
 	ft_process_3(e);
 }

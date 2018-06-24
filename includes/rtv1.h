@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 22:02:04 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/22 21:22:29 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/24 23:21:29 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,22 @@ typedef struct		s_auxcone
 	float			sangle;
 }					t_auxcone;
 
+typedef enum		e_object_type
+{
+	SPHERE,
+	CYLINDER,
+	PLANE,
+	CONE,
+	CAMERA,
+	LIGHT
+}					t_object_type;
+
+typedef struct		s_parser
+{
+	int				nb_lines;
+	int				parsed_object;
+}					t_parser;
+
 typedef struct		s_env
 {
 	t_sdl			sdl;
@@ -146,6 +162,7 @@ typedef struct		s_env
 	int				nb_objects;
 	int				current_object;
 	int				can_change;
+	t_parser		parser;
 	t_list			*objects;
 	t_list			*spots;
 	t_object		*selected_object;
@@ -165,14 +182,10 @@ void				ft_keys_down(t_env *e, SDL_Event event);
 void				ft_keys_up(t_env *e, SDL_Event event);
 void				ft_mouse_motion(t_env *e, SDL_Event event);
 
-t_object			*ft_new_sphere(float radius, t_vec3 pos,
-						t_vec3 rot, int color);
-t_object			*ft_new_plane(t_vec3 pos,
-						t_vec3 rot, int color);
-t_object			*ft_new_cylinder(float radius, t_vec3 pos,
-						t_vec3 rot, int color);
-t_object			*ft_new_cone(float angle, t_vec3 pos,
-						t_vec3 rot, int color);
+t_object			*ft_new_sphere(void);
+t_object			*ft_new_cylinder(void);
+t_object			*ft_new_plane(void);
+t_object			*ft_new_cone(void);
 
 float				ft_intersect_sphere(t_ray ray, t_object *object);
 float				ft_intersect_cone(t_ray ray, t_object *object);
@@ -184,10 +197,19 @@ t_vec3				ft_normal_plane(t_vec3 point, t_object *obj);
 t_vec3				ft_normal_cylinder(t_vec3 point, t_object *obj);
 t_vec3				ft_normal_cone(t_vec3 point, t_object *obj);
 
-t_spot				*ft_new_spot(t_vec3 position);
+t_spot				*ft_new_spot(void);
 void				ft_scene_3(t_env *e);
 void				ft_scene_4(t_env *e);
 void				ft_scene_5(t_env *e);
 void				ft_scene_6(t_env *e);
 t_hit				ft_trace(t_ray ray, t_env *e);
+int					ft_parse(char *filename, t_env *e);
+int					ft_parse_rot(char *filename, t_env *e);
+int					ft_parse_pos(char *filename, t_env *e);
+int					ft_parse_col(char *filename, t_env *e);
+int					ft_parse_angle(char *filename, t_env *e);
+int					ft_parse_radius(char *filename, t_env *e);
+int					ft_parse_shine(char *filename, t_env *e);
+int					ft_parse_smooth(char *filename, t_env *e);
+float				ft_deg_to_rad(int deg);
 #endif

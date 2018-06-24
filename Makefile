@@ -6,13 +6,13 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/06/23 15:20:17 by ldedier          ###   ########.fr        #
+#    Updated: 2018/06/24 22:36:33 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= rtv1
 
-CC		= gcc
+CC		= gcc -g3 -Wall -Wextra -Werror
 
 PWD = \"$(shell pwd)\"
 
@@ -46,8 +46,6 @@ LIBSDL2_INCLUDEDIR = ~/.brew/Cellar/sdl2/2.0.8/include/SDL2/
 SRCS_NO_PREFIX = main.c\
 				 ft_init.c\
 				 ft_init_2.c\
-				 ft_init_3.c\
-				 ft_init_4.c\
 				 ft_loop.c\
 				 ft_process.c\
 				 ft_render.c\
@@ -58,7 +56,11 @@ SRCS_NO_PREFIX = main.c\
 				 ft_intersections.c\
 				 ft_trace.c\
 				 ft_normals.c\
-				 ft_objects.c
+				 ft_objects.c\
+				 ft_parse.c\
+				 ft_parse_pos_rot_col.c\
+				 ft_tools.c\
+				 ft_parse_specifics.c
 
 INCLUDES_NO_PREFIX = rtv1.h
 

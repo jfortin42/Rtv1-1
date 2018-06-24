@@ -1,22 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd.c                                        :+:      :+:    :+:   */
+/*   ft_patoi.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/06 18:39:50 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 20:34:56 by ldedier          ###   ########.fr       */
+/*   Created: 2018/06/24 16:46:14 by ldedier           #+#    #+#             */
+/*   Updated: 2018/06/24 17:02:02 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_lstadd(t_list **alst, t_list *new)
+int		ft_patoi(char **s)
 {
-	if (new == NULL)
-		return (1);
-	new->next = *alst;
-	*alst = new;
-	return (0);
+	int i;
+	int res;
+	int start;
+
+	start = 0;
+	res = 0;
+	while (ft_isseparator((*s)[start]))
+		start++;
+	i = start;
+	if ((*s)[i] == '+' || (*s)[i] == '-')
+		i++;
+	while (ft_isdigit((*s)[i]))
+	{
+		res = res * 10 + (*s)[i] - '0';
+		i++;
+	}
+	if ((*s)[start] == '-')
+		res *= -1;
+	*s += i;
+	return (res);
 }

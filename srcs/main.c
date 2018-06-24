@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 20:33:57 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/22 20:55:39 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/24 23:36:03 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,57 +14,13 @@
 
 int		ft_error(int type)
 {
-	if (type == 1)
-	{
-		ft_putstr("Invalid scene. ");
-		ft_putstr("Available scenes: 'sphere' 'plane' 'cylinder' ");
-		ft_putstr("'cone' 'scene1' 'scene2'\n");
-	}
-	else if (type == 2)
+	if (type == 2)
 		ft_putstr("Invalid mode. Available mode: 'fast'\n");
 	ft_putstr("usage: ./rtv1 scene [ -mode ]\n");
 	return (1);
 }
 
-int		ft_set_scene_2(t_env *e, char *scene)
-{
-	if (ft_strcmp(scene, "scene1") == 0)
-	{
-		e->scene = 5;
-		return (1);
-	}
-	if (ft_strcmp(scene, "scene2") == 0)
-	{
-		e->scene = 6;
-		return (1);
-	}
-	return (0);
-}
 
-int		ft_set_scene(t_env *e, char *scene)
-{
-	if (ft_strcmp(scene, "sphere") == 0)
-	{
-		e->scene = 1;
-		return (1);
-	}
-	if (ft_strcmp(scene, "plane") == 0)
-	{
-		e->scene = 2;
-		return (1);
-	}
-	if (ft_strcmp(scene, "cylinder") == 0)
-	{
-		e->scene = 3;
-		return (1);
-	}
-	if (ft_strcmp(scene, "cone") == 0)
-	{
-		e->scene = 4;
-		return (1);
-	}
-	return (ft_set_scene_2(e, scene));
-}
 
 int		ft_set_mode(t_env *e, char *scene)
 {
@@ -76,14 +32,62 @@ int		ft_set_mode(t_env *e, char *scene)
 	return (0);
 }
 
+void	ft_print_vec3(t_vec3 vec)
+{
+	printf("%f, %f, %f\n", vec.x, vec.y, vec.z);
+}
+
+void	ft_print_object(t_object *object)
+{
+	if (object->intersect_func == ft_intersect_sphere)
+		printf("sphere\n");
+	else if (object->intersect_func == ft_intersect_cylinder)
+		printf("cylinder\n");
+	else if (object->intersect_func == ft_intersect_plane)
+		printf("plane\n");
+	else if (object->intersect_func == ft_intersect_cone)
+		printf("cone\n");
+	printf("pos:\n");
+	ft_print_vec3(object->position);
+	printf("rot:\n");
+	ft_print_vec3(object->rotation);
+	printf("position\n");
+	ft_printf("color: %#.6x\n", object->color);
+}
+
+void	ft_print_all(t_env e)
+{
+	t_list *ptr;
+	t_object *object;
+
+	printf("camera\n");
+	printf("position\n");
+	ft_print_vec3(e.cam.position);
+	printf("rotation\n");
+	ft_print_vec3(e.cam.rotation);
+
+	ptr = e.objects;
+	while(ptr)
+	{
+		object = (t_object *)(ptr->content);
+		ft_print_object(object);
+
+		ptr = ptr->next;
+	}
+}
+
 int		main(int argc, char **argv)
 {
 	t_env	e;
 
 	if (argc < 2 || argc > 3)
 		return (ft_error(0));
-	if (!ft_set_scene(&e, argv[1]))
-		return (ft_error(1));
+	if (argc >= 2)
+	{
+		ft_parse(argv[1], &e);
+		ft_print_all(e);
+		ft_init_scene(&e);
+	}
 	e.mode = 0;
 	if (argc == 3 && !ft_set_mode(&e, argv[2]))
 		return (ft_error(2));

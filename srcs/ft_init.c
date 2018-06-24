@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/22 20:57:53 by aherriau         ###   ########.fr       */
+/*   Updated: 2018/06/24 17:59:29 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,5 @@ int		ft_init_all(t_env *e)
 {
 	if (!ft_init_sdl(e))
 		return (0);
-	ft_init_scene(e);
 	return (1);
 }
