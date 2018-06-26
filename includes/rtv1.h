@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 22:02:04 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/24 23:21:29 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 18:08:48 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ typedef enum		e_object_type
 	PLANE,
 	CONE,
 	CAMERA,
+	AMBIANT,
 	LIGHT
 }					t_object_type;
 
@@ -204,12 +205,13 @@ void				ft_scene_5(t_env *e);
 void				ft_scene_6(t_env *e);
 t_hit				ft_trace(t_ray ray, t_env *e);
 int					ft_parse(char *filename, t_env *e);
-int					ft_parse_rot(char *filename, t_env *e);
-int					ft_parse_pos(char *filename, t_env *e);
-int					ft_parse_col(char *filename, t_env *e);
-int					ft_parse_angle(char *filename, t_env *e);
-int					ft_parse_radius(char *filename, t_env *e);
-int					ft_parse_shine(char *filename, t_env *e);
-int					ft_parse_smooth(char *filename, t_env *e);
+int					ft_parse_rot(char *str, t_env *e);
+int					ft_parse_pos(char *str, t_env *e);
+int					ft_parse_col(char *str, t_env *e);
+int					ft_parse_angle(char *str, t_env *e);
+int					ft_parse_radius(char *str, t_env *e);
+int					ft_parse_shine(char *str, t_env *e);
+int					ft_parse_smooth(char *str, t_env *e);
+int					ft_parse_intensity(char *str, t_env *e);
 float				ft_deg_to_rad(int deg);
 #endif

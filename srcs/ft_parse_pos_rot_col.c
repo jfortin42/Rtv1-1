@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 20:05:26 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 23:14:11 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 16:40:09 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int		ft_parse_rot_vec(t_vec3 *rot, char *str, t_env *e)
 	if (e->parser.parsed_object != CAMERA)
 		rot->z = ft_deg_to_rad(ft_patof(&str));
 	return (0);
-
 }
 
 int		ft_parse_rot(char *str, t_env *e)
@@ -85,7 +84,7 @@ int		ft_parse_col(char *str, t_env *e)
 	else
 	{
 		ft_printf(
-		"line %d: current object does not have a rotation attribute\n",
+		"line %d: current object does not have a color attribute\n",
 			e->parser.nb_lines);
 		return (1);
 	}

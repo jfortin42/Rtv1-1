@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/08 21:46:51 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 18:12:42 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:28:32 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ int		get_next_line(int const fd, char **line)
 	char			*rest;
 	int				index;
 
+	(void)list;
 	if (line == NULL)
 		return (-1);
 	if (!(rest = ft_get_buffer_rest(&list, fd)))

@@ -13,7 +13,7 @@ pos 0 0 54
 rot 0 -90 0
 radius 10
 cone
-pos 1 15 54
+pos 0 15 54
 rot 0 0 90
 col 0 255 0
 angle 45

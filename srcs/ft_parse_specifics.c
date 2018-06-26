@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 20:17:35 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 23:24:48 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 18:08:23 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,22 @@ int		ft_parse_smooth(char *str, t_env *e)
 		return (1);
 	}
 	*smoothness = ft_patof(&str);
+	return (0);
+}
+
+int		ft_parse_intensity(char *str, t_env *e)
+{
+	float *ambiant;
+
+	if (e->parser.parsed_object == AMBIANT)
+		ambiant = &(e->ambiant_coefficient);
+	else
+	{
+		ft_printf("line %d: this object does not have a intensity attribute\n",
+				e->parser.nb_lines);
+		return (1);
+	}
+	*ambiant = ft_fclamp(0, ft_patof(&str), 1);
+	printf("%f\n", *ambiant);
 	return (0);
 }

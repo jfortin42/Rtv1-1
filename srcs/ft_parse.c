@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 17:43:35 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 23:20:42 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 18:06:30 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	ft_init_parsing(t_env *e)
 	e->spots = NULL;
 	e->cam.rotation = ft_new_vec3(0, 0, 0);
 	e->cam.position = ft_new_vec3(0, 0, -1);
+	e->ambiant_coefficient = 0.3;
 }
 
 int		ft_process_parse_objects(char *str, t_env* e)
@@ -53,6 +54,11 @@ int		ft_process_parse_objects(char *str, t_env* e)
 		return (ft_lstadd(&(e->spots), ft_lstnew_ptr(ft_new_spot(),
 			sizeof(t_spot))));
 	}
+	else if (!ft_strcmp("ambiant", str))
+	{
+		e->parser.parsed_object = AMBIANT;
+		return (0);
+	}
 	else
 		return (1);
 	return (0);
@@ -74,6 +80,8 @@ int		ft_process_parse_attributes(char *str, t_env *e)
 		return (ft_parse_shine(&(str[6]), e));
 	else if (!ft_strncmp("smooth ", str, 7))
 		return (ft_parse_smooth(&(str[7]), e));
+	else if (!ft_strncmp("intensity ", str, 10))
+		return (ft_parse_intensity(&(str[10]), e));
 	else
 		return (ft_process_parse_objects(str, e));
 }
@@ -94,29 +102,40 @@ int		ft_process_parse(char *str, t_env *e)
 		return ft_process_parse_attributes(str, e);
 }
 
-int		ft_parse(char *filename, t_env *e)
+int		get_fd(int *fd, char *filename)
 {
-	int fd;
-	char *buff;
-
-	if ((fd = open(filename, O_RDONLY)) == -1)
+	if ((*fd = open(filename, O_RDONLY)) == -1)
 	{
 		perror(filename);
 		return (1);
 	}
+	else
+		return (0);
+}
+
+int		ft_parse(char *filename, t_env *e)
+{
+	int fd;
+	char *buff;
+	int ret;
+
+	buff = NULL;
 	ft_init_parsing(e);
-	while (get_next_line(fd, &buff))
+	if (get_fd(&fd, filename))
+		return (1);
+	while ((ret = get_next_line(fd, &buff)))
 	{
-		if (ft_process_parse(buff, e))
+		if (ret == -1 || ft_process_parse(buff, e))
 		{
 			printf("BUG : %s\n", buff);
-			free(buff);
+			if (buff != NULL)
+				ft_strdel(&buff);
 			//free_lists;
 			return 1;
 		}
 		e->parser.nb_lines++;
-		free(buff);
+		ft_strdel(&buff);
 	}
-	free(buff);
+	ft_strdel(&buff);
 	return (0);
 }

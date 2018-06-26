@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 20:33:57 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 23:36:03 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 18:09:40 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int		ft_error(int type)
 	ft_putstr("usage: ./rtv1 scene [ -mode ]\n");
 	return (1);
 }
-
-
 
 int		ft_set_mode(t_env *e, char *scene)
 {
@@ -67,7 +65,7 @@ void	ft_print_all(t_env e)
 	ft_print_vec3(e.cam.rotation);
 
 	ptr = e.objects;
-	while(ptr)
+	while (ptr)
 	{
 		object = (t_object *)(ptr->content);
 		ft_print_object(object);

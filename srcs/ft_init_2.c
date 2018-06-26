@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/19 12:34:10 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/24 23:33:00 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 18:01:43 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	ft_init_scene(t_env *e)
 {
 	e->cam.fov = (70 * M_PI) / 180.0;
 	e->speed = 0.2;
-	e->ambiant_coefficient = 0.3;
 	ft_init_keys(e);
 	e->nb_objects = ft_lstlength(e->objects);
 	e->current_object = 0;
