@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 19:26:30 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 19:31:21 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 19:19:19 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_object	*ft_new_cone(void)
 
 	if (!(res = malloc(sizeof(t_object))))
 		return (NULL);
-	res->object_union.cone.angle = 0.2;
+	res->object_union.cone.angle = 1.5707 / 2;
 	res->color = 0xFF0000;
 	res->position = ft_new_vec3(0, 0, 0);
 	res->rotation = ft_new_vec3(0, 0, 0);

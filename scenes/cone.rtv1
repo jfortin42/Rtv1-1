@@ -1,9 +1,9 @@
 cam
 pos 0 0 -3
 rot 0 0
-cylinder
+cone
 pos 0 0 0
 rot 0 0 90
-col 0 100 0
+col 100 100 0
 light
 pos 5 0.3 -5
