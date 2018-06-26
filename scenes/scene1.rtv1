@@ -1,28 +1,30 @@
 cam
-pos 0 10 -10
+pos 0 0 -10
 rot 0 0
-sphere
-pos 0 10 0
-rot 0 0 0
-shine 10
-smooth 10
-col 255 0 0
-radius 1
-cylinder
-pos 0 0 54
-rot 0 -90 0
-radius 10
-cone
-pos 0 15 54
-rot 0 0 90
-col 0 255 0
-angle 45
-light
-pos 5 2 5
-light
-pos -5 2 5
 plane
-pos 1 1 1
+pos 0 -10 0
 rot 0 0 0
+col 68 68 68
+plane
+pos 0 30 55
+rot 0 90 0
+col 0 0 255
+sphere
+pos 0 -6.5 20
+rot 0 0 0
+col 255 0 0
+radius 5
 shine 10
-smooth 10
+smooth 50
+cylinder
+pos -3 0 24
+rot 0 0 45
+col 0 255 0
+radius 5
+cone
+pos 7 -5 20
+rot 0 0 -60
+col 255 255 0
+angle 39.6
+light
+pos 10 0 0
