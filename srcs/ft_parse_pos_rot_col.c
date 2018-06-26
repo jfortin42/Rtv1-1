@@ -16,7 +16,7 @@ int		ft_parse_rot_vec(t_vec3 *rot, char *str, t_env *e)
 {
 	rot->x = ft_deg_to_rad(ft_patof(&str));
 	if (e->parser.parsed_object == CAMERA)
-		rot->y = ft_deg_to_rad(ft_fclamp( -90, ft_patof(&str), 90));
+		rot->y = ft_deg_to_rad(ft_fclamp(-90.0, ft_patof(&str), 90.0));
 	else
 		rot->y = ft_deg_to_rad(ft_patof(&str));
 	if (e->parser.parsed_object != CAMERA)
@@ -35,8 +35,7 @@ int		ft_parse_rot(char *str, t_env *e)
 	else
 	{
 		ft_printf(
-		"line %d: current object does not have a rotation attribute\n",
-			e->parser.nb_lines);
+				"current object does not have a rotation attribute\n");
 		return (1);
 	}
 	return (ft_parse_rot_vec(rot, str, e));
@@ -59,19 +58,18 @@ int		ft_parse_pos(char *str, t_env *e)
 	return (0);
 }
 
-int		ft_parse_col_vec(t_ivec3 vec, int *col, t_env *e)
+int		ft_parse_col_vec(t_ivec3 vec, int *col)
 {
 	if (vec.x > 255 || vec.x < 0 || vec.y > 255 || vec.y < 0 ||
 		vec.z > 255 || vec.z < 0)
 	{
 		ft_printf(
-		"line %d: (%d, %d, %d) : invalid color \n",
-			vec.x, vec.y, vec.z, e->parser.nb_lines);
+				"(%d, %d, %d) : invalid color\n",
+				vec.x, vec.y, vec.z);
 		return (1);
 	}
 	*col = (vec.x << 16) | (vec.y << 8) | (vec.z);
 	return (0);
-
 }
 
 int		ft_parse_col(char *str, t_env *e)
@@ -83,13 +81,11 @@ int		ft_parse_col(char *str, t_env *e)
 		col = &(((t_object*)(e->objects->content))->color);
 	else
 	{
-		ft_printf(
-		"line %d: current object does not have a color attribute\n",
-			e->parser.nb_lines);
+		ft_putendl("current object does not have a color attribute");
 		return (1);
 	}
 	vec.x = ft_patoi(&str);
 	vec.y = ft_patoi(&str);
 	vec.z = ft_patoi(&str);
-	return (ft_parse_col_vec(vec, col, e));
+	return (ft_parse_col_vec(vec, col));
 }

@@ -12,11 +12,20 @@
 
 #include "rtv1.h"
 
+void __attribute__((constructor)) begin();
+void __attribute__((destructor)) end();
+
 int		ft_error(int type)
 {
-	if (type == 2)
+	if (type == -2)
+	{
 		ft_putstr("Invalid mode. Available mode: 'fast'\n");
-	ft_putstr("usage: ./rtv1 scene [ -mode ]\n");
+		ft_putstr("usage: ./rtv1 scene [ -mode ]\n");
+	}
+	else if (type == 0)
+		ft_putstr("usage: ./rtv1 scene [ -mode ]\n");
+	else if (type > 0)
+		ft_printf("Invalid scene. Error line %d\n", type);
 	return (1);
 }
 
@@ -74,23 +83,41 @@ void	ft_print_all(t_env e)
 	}
 }
 
+void	begin()
+{
+	ft_printf("begin\n");
+}
+
+void	end()
+{
+	ft_printf("end\n");
+	//while (1);
+}
+
 int		main(int argc, char **argv)
 {
 	t_env	e;
+	int		p;
 
 	if (argc < 2 || argc > 3)
 		return (ft_error(0));
 	if (argc >= 2)
 	{
-		ft_parse(argv[1], &e);
+		p = ft_parse(argv[1], &e);
+		if (p == -1 || p > 0)
+			return (ft_error(p));
 		ft_print_all(e);
 		ft_init_scene(&e);
 	}
 	e.mode = 0;
 	if (argc == 3 && !ft_set_mode(&e, argv[2]))
-		return (ft_error(2));
+		return (ft_error(-2));
 	if (!ft_init_all(&e))
 		return (1);
 	ft_loop(&e);
+	ft_free_lists(&e);
+	SDL_FreeSurface(e.sdl.surface);
+	SDL_DestroyRenderer(e.sdl.renderer);
+	SDL_DestroyWindow(e.sdl.window);
 	return (0);
 }

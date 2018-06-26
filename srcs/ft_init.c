@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 17:59:29 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 18:01:19 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ int		ft_init_sdl(t_env *e)
 	if (!(e->sdl.window = SDL_CreateWindow("rtv1", e->sdl.screen.x,
 					e->sdl.screen.y, e->sdl.screen.w, e->sdl.screen.h, 0)))
 		return (0);
-	e->sdl.renderer = SDL_CreateRenderer(e->sdl.window, -1, 0);
+	if (!(e->sdl.renderer = SDL_CreateRenderer(e->sdl.window, -1, 0)))
+		return (0);
 	if (!(e->sdl.surface = SDL_CreateRGBSurface(0, e->sdl.screen.w,
 					e->sdl.screen.h, 32, 0, 0, 0, 0)))
-		return (0);
-	if (e->sdl.renderer == NULL)
 		return (0);
 	if (SDL_RenderSetLogicalSize(e->sdl.renderer, e->sdl.screen.w,
 				e->sdl.screen.h) < 0)

@@ -6,15 +6,15 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 17:43:35 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/26 18:06:30 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:58:51 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-void	ft_init_parsing(t_env *e)
+void	ft_init_parsing(t_env *e, int *nb_lines)
 {
-	e->parser.nb_lines = 1;
+	*nb_lines = 1;
 	e->objects = NULL;
 	e->spots = NULL;
 	e->cam.rotation = ft_new_vec3(0, 0, 0);
@@ -86,9 +86,9 @@ int		ft_process_parse_attributes(char *str, t_env *e)
 		return (ft_process_parse_objects(str, e));
 }
 
-int		ft_process_parse(char *str, t_env *e)
+int		ft_process_parse(int nb_lines, char *str, t_env *e)
 {
-	if (e->parser.nb_lines == 1)
+	if (nb_lines == 1)
 	{
 		if (ft_strcmp(str, "cam"))
 			return (1);
@@ -107,33 +107,34 @@ int		get_fd(int *fd, char *filename)
 	if ((*fd = open(filename, O_RDONLY)) == -1)
 	{
 		perror(filename);
-		return (1);
+		return (-1);
 	}
 	else
 		return (0);
 }
-
 int		ft_parse(char *filename, t_env *e)
 {
 	int fd;
 	char *buff;
 	int ret;
+	int		nb_lines;
+
 
 	buff = NULL;
-	ft_init_parsing(e);
+	ft_init_parsing(e, &nb_lines);
 	if (get_fd(&fd, filename))
 		return (1);
 	while ((ret = get_next_line(fd, &buff)))
 	{
-		if (ret == -1 || ft_process_parse(buff, e))
+		if (ret == -1 || ft_process_parse(nb_lines, buff, e))
 		{
 			printf("BUG : %s\n", buff);
 			if (buff != NULL)
 				ft_strdel(&buff);
-			//free_lists;
+				ft_free_lists(e);
 			return 1;
 		}
-		e->parser.nb_lines++;
+		nb_lines++;
 		ft_strdel(&buff);
 	}
 	ft_strdel(&buff);
