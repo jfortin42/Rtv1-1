@@ -6,7 +6,7 @@
 /*   By: aherriau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 22:02:04 by aherriau          #+#    #+#             */
-/*   Updated: 2018/06/24 23:21:29 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:49:09 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,6 @@ typedef enum		e_object_type
 
 typedef struct		s_parser
 {
-	int				nb_lines;
 	int				parsed_object;
 }					t_parser;
 
@@ -212,4 +211,6 @@ int					ft_parse_radius(char *filename, t_env *e);
 int					ft_parse_shine(char *filename, t_env *e);
 int					ft_parse_smooth(char *filename, t_env *e);
 float				ft_deg_to_rad(int deg);
+void				ft_free_lists(t_env *e);
+
 #endif

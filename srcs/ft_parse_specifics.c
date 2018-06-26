@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 20:17:35 by ldedier           #+#    #+#             */
-/*   Updated: 2018/06/24 23:24:48 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/06/26 17:16:32 by aherriau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ int		ft_parse_radius(char *str, t_env *e)
 				->object_union.cylinder.radius);
 	else
 	{
-		ft_printf("line %d: this object does not have a radius attribute\n",
-				e->parser.nb_lines);
+		ft_printf("this object does not have a radius attribute\n");
 		return (1);
 	}
 	*radius = ft_patof(&str);
@@ -41,11 +40,10 @@ int		ft_parse_angle(char *str, t_env *e)
 				->object_union.cone.angle);
 	else
 	{
-		ft_printf("line %d: this object does not have a angle attribute\n",
-				e->parser.nb_lines);
+		ft_printf("this object does not have an angle attribute\n");
 		return (1);
 	}
-	*angle = ft_deg_to_rad(ft_fclamp(1, ft_patof(&str), 89));
+	*angle = ft_deg_to_rad(ft_fclamp(1.0, ft_patof(&str), 89.0));
 	return (0);
 }
 
@@ -60,8 +58,7 @@ int		ft_parse_shine(char *str, t_env *e)
 				->shininess);
 	else
 	{
-		ft_printf("line %d: this object does not have a shininess attribute\n",
-				e->parser.nb_lines);
+		ft_printf("this object does not have a shininess attribute\n");
 		return (1);
 	}
 	*shininess = ft_patof(&str);
@@ -78,8 +75,7 @@ int		ft_parse_smooth(char *str, t_env *e)
 				->smoothness);
 	else
 	{
-		ft_printf("line %d: this object does not have a smoothness attribute\n",
-				e->parser.nb_lines);
+		ft_printf("this object does not have a smoothness attribute\n");
 		return (1);
 	}
 	*smoothness = ft_patof(&str);
