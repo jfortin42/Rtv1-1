@@ -1,0 +1,8 @@
+cam
+pos 0 0 0
+rot 0 0
+plane
+pos 0 -5 0
+col 0 0 255
+light
+pos 0 10 5
