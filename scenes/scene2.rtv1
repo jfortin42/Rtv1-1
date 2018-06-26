@@ -1,0 +1,103 @@
+cam
+pos 0 0 -20
+rot 0 0
+plane
+pos 0 0 30
+rot 0 90 0
+col 70 70 255
+plane
+pos 0 -10 0
+rot 0 0 0
+col 100 100 100
+plane
+pos 0 10 0
+rot 0 0 0
+col 100 100 100
+cylinder
+pos 10 0 18
+radius 2
+col 100 100 100
+rot 0 0 90
+shine 1
+smooth 10
+sphere
+pos 10 10 18
+radius 4
+shine 1
+smooth 10
+col 100 100 100
+sphere
+pos -10 10 18
+radius 4
+shine 1
+smooth 10
+col 100 100 100
+sphere
+pos -10 -10 18
+radius 4
+col 100 100 100
+shine 1
+smooth 10
+sphere
+pos 10 -10 18
+radius 4
+col 100 100 100
+shine 1
+smooth 10
+cylinder
+pos -10 0 18
+radius 2
+col 100 100 100
+rot 0 0 90
+shine 1
+smooth 10
+cylinder
+pos 10 0 0
+radius 2
+col 100 100 100
+rot 0 0 90
+shine 1
+smooth 10
+cylinder
+pos -10 0 0
+radius 2
+col 100 100 100
+rot 0 0 90
+shine 1
+smooth 10
+sphere
+pos -10 10 0
+radius 4
+col 100 100 100
+shine 1
+smooth 10
+sphere
+pos -10 -10 0
+radius 4
+col 100 100 100
+shine 1
+smooth 10
+sphere
+pos 10 10 0
+radius 4
+col 100 100 100
+shine 1
+smooth 10
+sphere
+pos 10 -10 0
+radius 4
+col 100 100 100
+shine 1
+smooth 10
+sphere
+pos 0 -7.5 0
+col 150 0 0
+radius 1.4
+shine 1
+smooth 10
+light
+pos 19 0 -11
+light
+pos -19 0 -11
+ambiant
+intensity 0.2

@@ -4,9 +4,10 @@ rot 0 0
 sphere
 pos 0 0 0
 rot 0 0 0
+col 100 0 0
 shine 0.92
-smooth 15
+smooth 30
 light
-pos 1.5 -0.01 -5
+pos 2 0 -5
 ambiant
 intensity 0.2
